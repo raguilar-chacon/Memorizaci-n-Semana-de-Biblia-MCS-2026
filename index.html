@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal de Administración - MCS 2026</title>
+  <title>Portal Evaluación Biblia - MCS 2026</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js via CDN -->
@@ -36,7 +36,7 @@
         </div>
         <button id="btnAdminMgmt" onclick="window.renderAdminList(); document.getElementById('adminModal').classList.remove('hidden');" class="hidden items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs font-bold px-3 py-2 rounded-lg transition shadow">
           <i class="fa-solid fa-user-shield"></i>
-          <span>Administradores</span>
+          <span>Gestionar Admins</span>
         </button>
         <button onclick="window.handleLogout()" class="text-slate-400 hover:text-red-400 transition text-sm p-2" title="Cerrar Sesión">
           <i class="fa-solid fa-right-from-bracket text-lg"></i>
@@ -87,81 +87,135 @@
 
       <!-- NAVIGATION TABS -->
       <div class="flex flex-wrap border-b border-slate-300 gap-2">
-        <button id="tabBtnResumen" onclick="window.switchTab('resumen')" class="px-4 py-2 text-sm font-bold border-b-2 border-amber-500 text-amber-600 flex items-center space-x-2">
-          <i class="fa-solid fa-chart-pie"></i><span>Resumen General</span>
+        <button id="tabBtnEval" onclick="window.switchTab('eval')" class="px-4 py-2 text-sm font-bold border-b-2 border-amber-500 text-amber-600 flex items-center space-x-2">
+          <i class="fa-solid fa-clipboard-check"></i><span>Evaluación de Versículos</span>
         </button>
-        <button id="tabBtnSecciones" onclick="window.switchTab('secciones')" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-2">
-          <i class="fa-solid fa-layer-group"></i><span>Secciones e Indicadores</span>
+        <button id="tabBtnGlobal" onclick="window.switchTab('global')" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-2">
+          <i class="fa-solid fa-trophy"></i><span>Tabla Global de Puntos</span>
+        </button>
+        <button id="tabBtnVerses" onclick="window.switchTab('verses')" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-2">
+          <i class="fa-solid fa-book-open"></i><span>Gestión de Versículos</span>
         </button>
         <button id="tabBtnEstudiantes" onclick="window.switchTab('estudiantes')" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-2">
           <i class="fa-solid fa-users"></i><span>Gestión de Estudiantes</span>
         </button>
       </div>
 
-      <!-- TAB: RESUMEN GENERAL -->
-      <div id="tabResumen" class="space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200 flex items-center space-x-4">
-            <div class="p-3 bg-blue-100 text-blue-600 rounded-lg"><i class="fa-solid fa-graduation-cap text-2xl"></i></div>
-            <div>
-              <p class="text-xs text-slate-500 font-bold uppercase">Total Estudiantes</p>
-              <p id="statTotalStudents" class="text-2xl font-extrabold text-slate-800">0</p>
-            </div>
+      <!-- TAB: EVALUACIÓN DE VERSÍCULOS -->
+      <div id="tabEval" class="space-y-6">
+        <div class="bg-white p-6 rounded-2xl shadow border border-slate-200 max-w-3xl mx-auto space-y-6">
+          <div class="border-b pb-3">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+              <i class="fa-solid fa-check-double text-amber-500"></i>
+              <span>Evaluación de Memorización</span>
+            </h3>
+            <p class="text-xs text-slate-500">Seleccione la sección, el estudiante y el versículo para calificar.</p>
           </div>
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200 flex items-center space-x-4">
-            <div class="p-3 bg-amber-100 text-amber-600 rounded-lg"><i class="fa-solid fa-school text-2xl"></i></div>
-            <div>
-              <p class="text-xs text-slate-500 font-bold uppercase">Total Secciones</p>
-              <p id="statTotalSections" class="text-2xl font-extrabold text-slate-800">0</p>
-            </div>
-          </div>
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200 flex items-center space-x-4">
-            <div class="p-3 bg-emerald-100 text-emerald-600 rounded-lg"><i class="fa-solid fa-mars text-2xl"></i></div>
-            <div>
-              <p class="text-xs text-slate-500 font-bold uppercase">Varones</p>
-              <p id="statTotalMale" class="text-2xl font-extrabold text-slate-800">0</p>
-            </div>
-          </div>
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200 flex items-center space-x-4">
-            <div class="p-3 bg-pink-100 text-pink-600 rounded-lg"><i class="fa-solid fa-venus text-2xl"></i></div>
-            <div>
-              <p class="text-xs text-slate-500 font-bold uppercase">Mujeres</p>
-              <p id="statTotalFemale" class="text-2xl font-extrabold text-slate-800">0</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
-            <h3 class="font-bold text-slate-700 mb-4 text-sm uppercase">Distribución de Estudiantes por Nivel</h3>
-            <div class="relative h-64"><canvas id="chartGrades"></canvas></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">1. Sección</label>
+              <select id="evalSection" onchange="window.handleEvalSectionChange(this.value)" class="w-full text-sm border border-slate-300 rounded-lg p-2.5 focus:ring-amber-500 outline-none bg-slate-50">
+                <option value="">Seleccione...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">2. Estudiante</label>
+              <select id="evalStudent" onchange="window.handleEvalStudentChange(this.value)" disabled class="w-full text-sm border border-slate-300 rounded-lg p-2.5 focus:ring-amber-500 outline-none bg-slate-50 disabled:opacity-50">
+                <option value="">Seleccione sección...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">3. Versículo</label>
+              <select id="evalVerse" onchange="window.renderVerseEvaluationBox()" disabled class="w-full text-sm border border-slate-300 rounded-lg p-2.5 focus:ring-amber-500 outline-none bg-slate-50 disabled:opacity-50">
+                <option value="">Seleccione estudiante...</option>
+              </select>
+            </div>
           </div>
-          <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
-            <h3 class="font-bold text-slate-700 mb-4 text-sm uppercase">Proporción por Género</h3>
-            <div class="relative h-64"><canvas id="chartGender"></canvas></div>
+
+          <!-- EVALUATION ACTION CARD -->
+          <div id="evalActionBox" class="hidden bg-slate-50 p-6 rounded-xl border border-slate-200 text-center space-y-4">
+            <div id="evalVerseDetails" class="space-y-1">
+              <span id="evalVerseBadge" class="bg-amber-100 text-amber-800 text-xs font-extrabold px-2.5 py-1 rounded-full"></span>
+              <h4 id="evalVerseRef" class="text-lg font-extrabold text-slate-800 pt-2"></h4>
+              <p id="evalVerseText" class="text-sm text-slate-600 italic px-4"></p>
+            </div>
+
+            <div id="evalStatusBanner" class="p-3 rounded-lg text-xs font-bold"></div>
+
+            <div class="flex justify-center items-center gap-4 pt-2">
+              <button id="btnAwardPoints" onclick="window.setVerseStatus(true)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Aprobado (Ganó Puntos)</span>
+              </button>
+              <button id="btnRevokePoints" onclick="window.setVerseStatus(false)" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span>Pendiente / No Logrado</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- TAB: SECCIONES -->
-      <div id="tabSecciones" class="hidden space-y-6">
-        <div class="flex items-center justify-between flex-wrap gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow">
+      <!-- TAB: GLOBAL DE PUNTOS -->
+      <div id="tabGlobal" class="hidden space-y-6">
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center space-x-2">
-            <label class="text-xs font-bold uppercase text-slate-600">Filtrar por Nivel:</label>
-            <select id="sectionGradeFilter" onchange="window.handleGradeFilterChange(this.value)" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-amber-500 outline-none">
-              <option value="ALL">Todos los Niveles</option>
-              <option value="7">Séptimo Año (7°)</option>
-              <option value="8">Octavo Año (8°)</option>
-              <option value="9">Noveno Año (9°)</option>
-              <option value="10">Décimo Año (10°)</option>
-              <option value="11">Undécimo Año (11°)</option>
+            <i class="fa-solid fa-trophy text-amber-500 text-xl"></i>
+            <h3 class="font-bold text-slate-800 text-base">Tabla General de Puntuaciones</h3>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label class="text-xs font-bold uppercase text-slate-600">Filtrar por Sección:</label>
+            <select id="globalSectionFilter" onchange="window.renderGlobalScores()" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-amber-500 outline-none">
+              <option value="ALL">Todas las Secciones</option>
             </select>
           </div>
         </div>
-        <div id="sectionsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <div class="bg-white rounded-xl shadow border border-slate-200 overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase">
+                <th class="p-3 text-center">#</th>
+                <th class="p-3">Estudiante</th>
+                <th class="p-3">Sección</th>
+                <th class="p-3 text-center">Versículos Completados</th>
+                <th class="p-3 text-center">Puntos Totales Acumulados</th>
+              </tr>
+            </thead>
+            <tbody id="globalTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- TAB: ESTUDIANTES -->
+      <!-- TAB: GESTIÓN DE VERSÍCULOS -->
+      <div id="tabVerses" class="hidden space-y-4">
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+            <i class="fa-solid fa-book-open text-amber-500"></i>
+            <span>Lista de Versículos a Memorizar</span>
+          </h3>
+          <button onclick="window.openVerseModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition shadow flex items-center space-x-2">
+            <i class="fa-solid fa-plus"></i><span>Agregar Versículo</span>
+          </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow border border-slate-200 overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase">
+                <th class="p-3">Referencia</th>
+                <th class="p-3">Texto del Versículo</th>
+                <th class="p-3 text-center">Valor en Puntos</th>
+                <th class="p-3 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="verseTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: GESTIÓN DE ESTUDIANTES -->
       <div id="tabEstudiantes" class="hidden space-y-4">
         <div class="bg-white p-4 rounded-xl shadow border border-slate-200 flex flex-wrap items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-3">
@@ -196,6 +250,35 @@
     </section>
   </main>
 
+  <!-- MODAL: AGREGAR / EDITAR VERSÍCULO -->
+  <div id="verseModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 id="verseModalTitle" class="font-bold text-slate-800 text-lg">Agregar Versículo</h3>
+        <button onclick="window.closeVerseModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <form onsubmit="window.saveVerseForm(event)" class="space-y-4">
+        <input type="hidden" id="verseEditId">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Cita / Referencia</label>
+          <input type="text" id="verseReference" required class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-amber-500 outline-none" placeholder="Ej: Juan 3:16">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Texto del Versículo</label>
+          <textarea id="verseContent" required rows="3" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-amber-500 outline-none" placeholder="Porque de tal manera amó Dios al mundo..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Valor en Puntos</label>
+          <input type="number" id="versePoints" min="1" value="10" required class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-amber-500 outline-none">
+        </div>
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+          <button type="button" onclick="window.closeVerseModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
+          <button type="submit" class="px-4 py-2 text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-lg transition shadow">Guardar Versículo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: AGREGAR / EDITAR ESTUDIANTE -->
   <div id="studentModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
@@ -228,7 +311,7 @@
     </div>
   </div>
 
-  <!-- MODAL: GESTIÓN DE ADMINISTRADORES -->
+  <!-- MODAL: GESTIÓN DE ADMINISTRADORES (Solo Administrador Maestro) -->
   <div id="adminModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
@@ -284,6 +367,13 @@
       "11-1", "11-2", "11-3", "11-4"
     ];
 
+    const INITIAL_VERSES = [
+      { id: "v1", reference: "Juan 3:16", text: "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.", points: 10 },
+      { id: "v2", reference: "Salmos 23:1", text: "Jehová es mi pastor; nada me faltará.", points: 5 },
+      { id: "v3", reference: "Filipenses 4:13", text: "Todo lo puedo en Cristo que me fortalece.", points: 5 },
+      { id: "v4", reference: "Proverbios 3:5", text: "Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.", points: 10 }
+    ];
+
     const INITIAL_STUDENTS_MAP = [
       { name: "Mateo Alvarado Vargas", section: "7-1", gender: "M" },
       { name: "Valeria Castillo Rojas", section: "7-1", gender: "F" },
@@ -300,18 +390,19 @@
     let state = {
       admins: [],
       students: [],
+      verses: [],
+      evaluations: {}, // { "studentId_verseId": true }
       sections: DEFAULT_SECTIONS,
-      activeTab: 'resumen',
-      sectionGradeFilter: 'ALL',
-      charts: {}
+      activeTab: 'eval'
     };
 
     let currentUser = null;
 
-    // Load initial storage/fallback
     function loadInitialFallbackData() {
       const savedAdmins = localStorage.getItem('mcs_2026_admins');
       const savedStudents = localStorage.getItem('mcs_2026_students');
+      const savedVerses = localStorage.getItem('mcs_2026_verses');
+      const savedEvals = localStorage.getItem('mcs_2026_evals');
 
       if (savedAdmins) {
         try { state.admins = JSON.parse(savedAdmins); } catch(e) { state.admins = []; }
@@ -335,9 +426,21 @@
         state.students = INITIAL_STUDENTS_MAP.map((s, idx) => ({ id: 'st_' + idx, ...s }));
         localStorage.setItem('mcs_2026_students', JSON.stringify(state.students));
       }
+
+      if (savedVerses) {
+        try { state.verses = JSON.parse(savedVerses); } catch(e) { state.verses = []; }
+      }
+      if (!state.verses || state.verses.length === 0) {
+        state.verses = INITIAL_VERSES;
+        localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
+      }
+
+      if (savedEvals) {
+        try { state.evaluations = JSON.parse(savedEvals); } catch(e) { state.evaluations = {}; }
+      }
     }
 
-    // AUTHENTICATION LOGIC (Robusta & Offline-Proof)
+    // AUTHENTICATION LOGIC
     window.handleLogin = function(e) {
       if (e && e.preventDefault) e.preventDefault();
 
@@ -378,7 +481,7 @@
         }
 
         showToast('Bienvenido/a, ' + (currentUser.name || userIn));
-        populateSectionDropdowns();
+        populateDropdowns();
         refreshUI();
       } else {
         alertBox.innerText = 'Usuario o contraseña incorrectos.';
@@ -400,7 +503,7 @@
     // UI REFRESH AND TABS
     window.switchTab = function(tabName) {
       state.activeTab = tabName;
-      ['resumen', 'secciones', 'estudiantes'].forEach(t => {
+      ['eval', 'global', 'verses', 'estudiantes'].forEach(t => {
         const tabEl = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
         const btnEl = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         if (t === tabName) {
@@ -415,100 +518,256 @@
     };
 
     function refreshUI() {
-      if (state.activeTab === 'resumen') renderChartsAndStats();
-      if (state.activeTab === 'secciones') renderSectionsList();
+      if (state.activeTab === 'eval') populateEvalSections();
+      if (state.activeTab === 'global') renderGlobalScores();
+      if (state.activeTab === 'verses') renderVerseList();
       if (state.activeTab === 'estudiantes') renderStudentList();
     }
 
-    function renderChartsAndStats() {
-      const totalSt = state.students.length;
-      const males = state.students.filter(s => s.gender === 'M').length;
-      const females = state.students.filter(s => s.gender === 'F').length;
-
-      document.getElementById('statTotalStudents').innerText = totalSt;
-      document.getElementById('statTotalSections').innerText = state.sections.length;
-      document.getElementById('statTotalMale').innerText = males;
-      document.getElementById('statTotalFemale').innerText = females;
-
-      // Chart: Gender
-      if (state.charts.gender) state.charts.gender.destroy();
-      const ctxG = document.getElementById('chartGender').getContext('2d');
-      state.charts.gender = new Chart(ctxG, {
-        type: 'doughnut',
-        data: {
-          labels: ['Varones', 'Mujeres'],
-          datasets: [{ data: [males, females], backgroundColor: ['#3b82f6', '#ec4899'] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
-
-      // Chart: Grades
-      const gradeCounts = { '7°': 0, '8°': 0, '9°': 0, '10°': 0, '11°': 0 };
-      state.students.forEach(s => {
-        const g = s.section.split('-')[0] + '°';
-        if (gradeCounts[g] !== undefined) gradeCounts[g]++;
-      });
-
-      if (state.charts.grades) state.charts.grades.destroy();
-      const ctxGr = document.getElementById('chartGrades').getContext('2d');
-      state.charts.grades = new Chart(ctxGr, {
-        type: 'bar',
-        data: {
-          labels: Object.keys(gradeCounts),
-          datasets: [{ label: 'Estudiantes', data: Object.values(gradeCounts), backgroundColor: '#f59e0b' }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-      });
-    }
-
-    window.handleGradeFilterChange = function(val) {
-      state.sectionGradeFilter = val;
-      renderSectionsList();
-    };
-
-    function renderSectionsList() {
-      const container = document.getElementById('sectionsContainer');
-      container.innerHTML = '';
-
-      const filteredSections = state.sections.filter(sec => {
-        if (state.sectionGradeFilter === 'ALL') return true;
-        return sec.startsWith(state.sectionGradeFilter + '-');
-      });
-
-      filteredSections.forEach(sec => {
-        const secStudents = state.students.filter(s => s.section === sec);
-        const m = secStudents.filter(s => s.gender === 'M').length;
-        const f = secStudents.filter(s => s.gender === 'F').length;
-
-        const card = document.createElement('div');
-        card.className = "bg-white p-5 rounded-xl shadow border border-slate-200 hover:border-amber-400 transition space-y-3";
-        card.innerHTML = `
-          <div class="flex justify-between items-center border-b pb-2">
-            <h4 class="font-extrabold text-slate-800 text-lg">Sección ${sec}</h4>
-            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-bold">${secStudents.length} Alumnos</span>
-          </div>
-          <div class="flex justify-around text-xs pt-1">
-            <span class="text-blue-600 font-semibold"><i class="fa-solid fa-mars mr-1"></i>${m} Varones</span>
-            <span class="text-pink-600 font-semibold"><i class="fa-solid fa-venus mr-1"></i>${f} Mujeres</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function populateSectionDropdowns() {
+    function populateDropdowns() {
       const studentSecFilter = document.getElementById('studentSectionFilter');
       const studentSecModal = document.getElementById('studentSection');
+      const globalSecFilter = document.getElementById('globalSectionFilter');
 
       studentSecFilter.innerHTML = '<option value="ALL">Todas las Secciones</option>';
+      globalSecFilter.innerHTML = '<option value="ALL">Todas las Secciones</option>';
       studentSecModal.innerHTML = '';
 
       state.sections.forEach(sec => {
         studentSecFilter.innerHTML += `<option value="${sec}">Sección ${sec}</option>`;
+        globalSecFilter.innerHTML += `<option value="${sec}">Sección ${sec}</option>`;
         studentSecModal.innerHTML += `<option value="${sec}">Sección ${sec}</option>`;
       });
     }
 
+    // EVALUATION SECTION LOGIC
+    function populateEvalSections() {
+      const evalSec = document.getElementById('evalSection');
+      evalSec.innerHTML = '<option value="">Seleccione...</option>';
+      state.sections.forEach(sec => {
+        evalSec.innerHTML += `<option value="${sec}">Sección ${sec}</option>`;
+      });
+    }
+
+    window.handleEvalSectionChange = function(sec) {
+      const evalSt = document.getElementById('evalStudent');
+      const evalVr = document.getElementById('evalVerse');
+      const box = document.getElementById('evalActionBox');
+
+      box.classList.add('hidden');
+      evalVr.innerHTML = '<option value="">Seleccione estudiante...</option>';
+      evalVr.disabled = true;
+
+      if (!sec) {
+        evalSt.innerHTML = '<option value="">Seleccione sección...</option>';
+        evalSt.disabled = true;
+        return;
+      }
+
+      const stList = state.students.filter(s => s.section === sec);
+      evalSt.innerHTML = '<option value="">Seleccione Estudiante...</option>';
+      stList.forEach(s => {
+        evalSt.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+      });
+      evalSt.disabled = false;
+    };
+
+    window.handleEvalStudentChange = function(stId) {
+      const evalVr = document.getElementById('evalVerse');
+      const box = document.getElementById('evalActionBox');
+
+      box.classList.add('hidden');
+
+      if (!stId) {
+        evalVr.innerHTML = '<option value="">Seleccione estudiante...</option>';
+        evalVr.disabled = true;
+        return;
+      }
+
+      evalVr.innerHTML = '<option value="">Seleccione Versículo...</option>';
+      state.verses.forEach(v => {
+        evalVr.innerHTML += `<option value="${v.id}">${v.reference} (${v.points} pts)</option>`;
+      });
+      evalVr.disabled = false;
+    };
+
+    window.renderVerseEvaluationBox = function() {
+      const stId = document.getElementById('evalStudent').value;
+      const vId = document.getElementById('evalVerse').value;
+      const box = document.getElementById('evalActionBox');
+
+      if (!stId || !vId) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      const verse = state.verses.find(v => v.id === vId);
+      if (!verse) return;
+
+      document.getElementById('evalVerseBadge').innerText = `${verse.points} PUNTOS`;
+      document.getElementById('evalVerseRef').innerText = verse.reference;
+      document.getElementById('evalVerseText').innerText = `"${verse.text}"`;
+
+      const evalKey = `${stId}_${vId}`;
+      const isEarned = state.evaluations[evalKey] === true;
+      const banner = document.getElementById('evalStatusBanner');
+      const btnAward = document.getElementById('btnAwardPoints');
+
+      if (isEarned) {
+        banner.className = "p-3 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center space-x-2";
+        banner.innerHTML = '<i class="fa-solid fa-lock"></i><span>¡PUNTOS GANADOS! El estudiante ya aprobó este versículo y sus puntos están asegurados.</span>';
+        btnAward.disabled = true;
+        btnAward.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        banner.className = "p-3 rounded-lg text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200";
+        banner.innerText = 'El estudiante aún no ha obtenido los puntos de este versículo.';
+        btnAward.disabled = false;
+        btnAward.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+
+      box.classList.remove('hidden');
+    };
+
+    window.setVerseStatus = function(earned) {
+      const stId = document.getElementById('evalStudent').value;
+      const vId = document.getElementById('evalVerse').value;
+      if (!stId || !vId) return;
+
+      const evalKey = `${stId}_${vId}`;
+
+      if (earned) {
+        state.evaluations[evalKey] = true;
+        showToast('¡Puntos asignados al estudiante correctamente!');
+      } else {
+        delete state.evaluations[evalKey];
+        showToast('Puntos removidos / Versículo pendiente');
+      }
+
+      localStorage.setItem('mcs_2026_evals', JSON.stringify(state.evaluations));
+      renderVerseEvaluationBox();
+    };
+
+    // GLOBAL SCOREBOARD
+    window.renderGlobalScores = function() {
+      const tbody = document.getElementById('globalTableBody');
+      const secFilter = document.getElementById('globalSectionFilter').value;
+      tbody.innerHTML = '';
+
+      let studentScores = state.students.map(s => {
+        let totalPts = 0;
+        let countVerses = 0;
+
+        state.verses.forEach(v => {
+          const evalKey = `${s.id}_${v.id}`;
+          if (state.evaluations[evalKey] === true) {
+            totalPts += v.points;
+            countVerses++;
+          }
+        });
+
+        return { ...s, totalPts, countVerses };
+      });
+
+      if (secFilter !== 'ALL') {
+        studentScores = studentScores.filter(s => s.section === secFilter);
+      }
+
+      // Sort by points descending
+      studentScores.sort((a, b) => b.totalPts - a.totalPts);
+
+      studentScores.forEach((s, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-3 text-center font-extrabold text-slate-400">${idx + 1}</td>
+          <td class="p-3 font-semibold text-slate-800">${s.name}</td>
+          <td class="p-3"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs font-bold">${s.section}</span></td>
+          <td class="p-3 text-center font-bold text-slate-600">${s.countVerses} / ${state.verses.length}</td>
+          <td class="p-3 text-center font-extrabold text-emerald-600">${s.totalPts} pts</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    // VERSES MANAGEMENT
+    function renderVerseList() {
+      const tbody = document.getElementById('verseTableBody');
+      tbody.innerHTML = '';
+
+      state.verses.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-3 font-bold text-slate-800">${v.reference}</td>
+          <td class="p-3 text-slate-600 italic max-w-md">${v.text}</td>
+          <td class="p-3 text-center font-extrabold text-amber-600">${v.points} pts</td>
+          <td class="p-3 text-center space-x-2">
+            <button onclick="window.editVerse('${v.id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="window.deleteVerse('${v.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.openVerseModal = function() {
+      document.getElementById('verseEditId').value = '';
+      document.getElementById('verseReference').value = '';
+      document.getElementById('verseContent').value = '';
+      document.getElementById('versePoints').value = 10;
+      document.getElementById('verseModalTitle').innerText = 'Agregar Versículo';
+      document.getElementById('verseModal').classList.remove('hidden');
+    };
+
+    window.closeVerseModal = function() {
+      document.getElementById('verseModal').classList.add('hidden');
+    };
+
+    window.editVerse = function(id) {
+      const v = state.verses.find(item => item.id === id);
+      if (!v) return;
+      document.getElementById('verseEditId').value = v.id;
+      document.getElementById('verseReference').value = v.reference;
+      document.getElementById('verseContent').value = v.text;
+      document.getElementById('versePoints').value = v.points;
+      document.getElementById('verseModalTitle').innerText = 'Editar Versículo';
+      document.getElementById('verseModal').classList.remove('hidden');
+    };
+
+    window.saveVerseForm = function(e) {
+      e.preventDefault();
+      const editId = document.getElementById('verseEditId').value;
+      const reference = document.getElementById('verseReference').value.trim();
+      const text = document.getElementById('verseContent').value.trim();
+      const points = parseInt(document.getElementById('versePoints').value, 10) || 0;
+
+      if (editId) {
+        const idx = state.verses.findIndex(v => v.id === editId);
+        if (idx !== -1) {
+          state.verses[idx] = { id: editId, reference, text, points };
+          showToast('Versículo actualizado');
+        }
+      } else {
+        const newV = { id: 'v_' + Date.now(), reference, text, points };
+        state.verses.push(newV);
+        showToast('Versículo registrado');
+      }
+
+      localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
+      closeVerseModal();
+      refreshUI();
+    };
+
+    window.deleteVerse = function(id) {
+      if (confirm('¿Eliminar este versículo? Se afectarán las evaluaciones asociadas.')) {
+        state.verses = state.verses.filter(v => v.id !== id);
+        localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
+        showToast('Versículo eliminado');
+        refreshUI();
+      }
+    };
+
+    // STUDENT MANAGEMENT
     function renderStudentList() {
       const tbody = document.getElementById('studentTableBody');
       const search = document.getElementById('studentSearchInput').value.toLowerCase();
@@ -538,7 +797,6 @@
       });
     }
 
-    // STUDENT MODAL
     window.openStudentModal = function() {
       document.getElementById('studentEditId').value = '';
       document.getElementById('studentFullName').value = '';
@@ -572,12 +830,12 @@
         const idx = state.students.findIndex(s => s.id === editId);
         if (idx !== -1) {
           state.students[idx] = { id: editId, name, section, gender };
-          showToast('Estudiante actualizado correctamente');
+          showToast('Estudiante actualizado');
         }
       } else {
         const newSt = { id: 'st_' + Date.now(), name, section, gender };
         state.students.push(newSt);
-        showToast('Estudiante registrado con éxito');
+        showToast('Estudiante registrado');
       }
 
       localStorage.setItem('mcs_2026_students', JSON.stringify(state.students));
@@ -594,7 +852,7 @@
       }
     };
 
-    // ADMIN MANAGEMENT MODAL
+    // ADMIN MANAGEMENT (Restringido solo al Máster)
     window.closeAdminModal = function() {
       document.getElementById('adminModal').classList.add('hidden');
     };
