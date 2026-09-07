@@ -1224,9 +1224,20 @@
     }
 
     // INIT
-    window.addEventListener('DOMContentLoaded', () => {
-      loadInitialFallbackData();
-    });
+window.addEventListener('DOMContentLoaded', () => {
+  // 1. Carga los datos iniciales o del localStorage
+  loadInitialFallbackData();
+
+  // 2. Poblar selectores de secciones
+  populateDropdowns();
+
+  // 3. Opcional: Si quieres omitir la pantalla de Login y mostrar el dashboard directamente
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('dashboardView').classList.remove('hidden');
+
+  // 4. Renderizar las listas por primera vez
+  refreshUI();
+});
   </script>
 </body>
 </html>
