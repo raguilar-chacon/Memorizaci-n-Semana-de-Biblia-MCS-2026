@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Administración - MCS 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#172554',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .fade-in { animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                        <i class="fa-solid font-bold fa-school"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg sm:text-xl tracking-tight leading-none text-white">MCS 2026</h1>
+                        <p class="text-xs text-blue-300 font-medium">Portal de Administración</p>
+                    </div>
+                </div>
+
+                <!-- User Profile & Action Bar -->
+                <div id="userHeaderActions" class="hidden flex items-center space-x-2 sm:space-x-4">
+                    <button onclick="copyShareLink()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition flex items-center shadow-sm">
+                        <i class="fa-solid fa-share-nodes mr-1.5"></i>
+                        <span class="hidden sm:inline">Compartir Link</span>
+                    </button>
+
+                    <button id="btnAdminMgmt" onclick="openAdminModal()" class="hidden bg-slate-800 hover:bg-slate-700 text-blue-300 hover:text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition border border-slate-700 items-center">
+                        <i class="fa-solid fa-user-shield mr-1.5 text-amber-400"></i>
+                        <span>Administradores</span>
+                    </button>
+
+                    <div class="h-6 w-px bg-slate-700 mx-1"></div>
+
+                    <div class="flex items-center space-x-2">
+                        <div class="text-right hidden md:block">
+                            <div id="currentUserDisplay" class="text-xs font-semibold text-slate-100">Ramiro Aguilar</div>
+                            <div id="currentUserRole" class="text-[10px] text-amber-400 font-medium">Administrador Maestro</div>
+                        </div>
+                        <button onclick="logoutAdmin()" title="Cerrar Sesión" class="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-right-from-bracket text-base"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Login Overlay View -->
+        <div id="loginView" class="max-w-md mx-auto my-12 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden fade-in">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white text-center">
+                <div class="w-16 h-16 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-blue-500/30">
+                    <i class="fa-solid fa-lock text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold">Acceso Administrativo</h2>
+                <p class="text-slate-400 text-xs mt-1">Inicie sesión para acceder a las listas y gestión de MCS 2026</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+                <div id="loginAlert" class="hidden p-3 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200"></div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nombre de Usuario</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="loginUsername" required placeholder="Ej: ramiroaguilar" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Contraseña</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition duration-150 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> Ingresar al Portal
+                </button>
+
+                <!-- Initial Admin Access Banner -->
+                <div class="mt-4 pt-4 border-t border-slate-100 text-center">
+                    <p class="text-[11px] text-slate-500">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>
+                        <span class="font-semibold text-slate-700">Administrador Maestro Predeterminado:</span><br>
+                        Usuario: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-700 font-mono">ramiroaguilar</code> | Contraseña: <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-700 font-mono">raguilar111</code>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Authenticated Admin Dashboard -->
+        <div id="dashboardView" class="hidden space-y-6 fade-in">
+            
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+                <nav class="flex space-x-1 sm:space-x-2">
+                    <button onclick="switchTab('resumen')" id="tab-resumen" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition bg-blue-600 text-white shadow-sm">
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i> Resumen General
+                    </button>
+                    <button onclick="switchTab('secciones')" id="tab-secciones" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i> Por Secciones
+                    </button>
+                    <button onclick="switchTab('estudiantes')" id="tab-estudiantes" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-graduation-cap mr-1.5"></i> Estudiantes
+                    </button>
+                </nav>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="openAddStudentModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs font-semibold transition shadow-sm flex items-center">
+                        <i class="fa-solid fa-user-plus mr-1.5"></i> Nuevo Estudiante
+                    </button>
+                    <button onclick="exportToCSV()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center">
+                        <i class="fa-solid fa-file-csv mr-1.5 text-emerald-600"></i> Exportar
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 1: RESUMEN GENERAL -->
+            <div id="content-resumen" class="tab-content space-y-6">
+                <!-- Top Key Metrics Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Total Estudiantes</div>
+                        <div id="statTotalStudents" class="text-2xl font-bold text-slate-900 mt-1">0</div>
+                        <div class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-users text-blue-500 mr-1"></i> Generación 2026</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Secciones</div>
+                        <div id="statTotalSections" class="text-2xl font-bold text-indigo-600 mt-1">16</div>
+                        <div class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-door-open text-indigo-500 mr-1"></i> De 7° a 11°</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Programa MATEM</div>
+                        <div id="statMatemCount" class="text-2xl font-bold text-amber-600 mt-1">0</div>
+                        <div class="text-[11px] text-amber-600/80 mt-1 font-medium"><i class="fa-solid fa-calculator mr-1"></i> Matemáticas UCR/TEC</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Banda MCS</div>
+                        <div id="statBandaCount" class="text-2xl font-bold text-emerald-600 mt-1">0</div>
+                        <div class="text-[11px] text-emerald-600/80 mt-1 font-medium"><i class="fa-solid fa-music mr-1"></i> Integrantes Música</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Programa ESL</div>
+                        <div id="statEslCount" class="text-2xl font-bold text-purple-600 mt-1">0</div>
+                        <div class="text-[11px] text-purple-600/80 mt-1 font-medium"><i class="fa-solid fa-language mr-1"></i> Inglés Secundario</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="text-slate-500 text-xs font-medium">Nuevo Ingreso (NI)</div>
+                        <div id="statNiCount" class="text-2xl font-bold text-sky-600 mt-1">0</div>
+                        <div class="text-[11px] text-sky-600/80 mt-1 font-medium"><i class="fa-solid fa-user-tag mr-1"></i> Estudiantes Nuevos</div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                            <i class="fa-solid fa-chart-column text-blue-600 mr-2"></i> Estudiantes por Nivel
+                        </h3>
+                        <div class="relative h-64">
+                            <canvas id="chartGrades"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                            <i class="fa-solid fa-pie-chart text-emerald-600 mr-2"></i> Distribución de Programas
+                        </h3>
+                        <div class="relative h-64">
+                            <canvas id="chartPrograms"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Docentes Guías Table -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">
+                            <i class="fa-solid fa-chalkboard-user text-indigo-600 mr-2"></i> Directorio de Docentes Guías
+                        </h3>
+                        <span class="text-xs text-slate-500">Año Lectivo 2026</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200 uppercase text-[11px] tracking-wider">
+                                <tr>
+                                    <th class="px-5 py-3">Sección</th>
+                                    <th class="px-5 py-3">Nivel</th>
+                                    <th class="px-5 py-3">Docente Guía</th>
+                                    <th class="px-5 py-3 text-center">Matrícula</th>
+                                    <th class="px-5 py-3 text-center">Mujeres</th>
+                                    <th class="px-5 py-3 text-center">Hombres</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guideTeachersTable" class="divide-y divide-slate-100 font-medium">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: POR SECCIONES -->
+            <div id="content-secciones" class="tab-content hidden space-y-6">
+                <!-- Grade Filter Pills -->
+                <div class="flex flex-wrap gap-2 items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-slate-500 uppercase mr-2">Filtrar por Nivel:</span>
+                    <button onclick="filterSectionsGrade('ALL')" id="sec-btn-ALL" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-blue-600 text-white">Todas</button>
+                    <button onclick="filterSectionsGrade('7')" id="sec-btn-7" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">7° Sétimo</button>
+                    <button onclick="filterSectionsGrade('8')" id="sec-btn-8" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">8° Octavo</button>
+                    <button onclick="filterSectionsGrade('9')" id="sec-btn-9" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">9° Noveno</button>
+                    <button onclick="filterSectionsGrade('10')" id="sec-btn-10" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">10° Décimo</button>
+                    <button onclick="filterSectionsGrade('11')" id="sec-btn-11" class="sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">11° Undécimo</button>
+                </div>
+
+                <!-- Sections Grid Container -->
+                <div id="sectionsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- TAB 3: LISTA COMPLETA DE ESTUDIANTES -->
+            <div id="content-estudiantes" class="tab-content hidden space-y-4">
+                <!-- Filters Bar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap gap-3 items-center justify-between">
+                    <div class="relative flex-grow max-w-md">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="studentSearchInput" oninput="renderStudentsTable()" placeholder="Buscar estudiante por nombre..." class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="sectionFilter" onchange="renderStudentsTable()" class="text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+                            <option value="">Todas las Secciones</option>
+                            <!-- Options added dynamically -->
+                        </select>
+
+                        <select id="tagFilter" onchange="renderStudentsTable()" class="text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+                            <option value="">Todos los Programas</option>
+                            <option value="MATEM">MATEM</option>
+                            <option value="Banda MCS">Banda MCS</option>
+                            <option value="ESL">ESL</option>
+                            <option value="SAPI">SAPI / Apoyo</option>
+                            <option value="NI">Nuevo Ingreso (NI)</option>
+                            <option value="Intercambio">Intercambio</option>
+                        </select>
+
+                        <button onclick="resetStudentFilters()" class="px-3 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Students Data Table -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs sm:text-sm">
+                            <thead class="bg-slate-800 text-slate-200 font-semibold uppercase text-[11px] tracking-wider">
+                                <tr>
+                                    <th class="px-4 py-3">#</th>
+                                    <th class="px-4 py-3">Apellidos y Nombre</th>
+                                    <th class="px-4 py-3">Sección</th>
+                                    <th class="px-4 py-3">Docente Guía</th>
+                                    <th class="px-4 py-3">Programas / Distinciones</th>
+                                    <th class="px-4 py-3 text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody" class="divide-y divide-slate-100 font-medium">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 text-xs text-slate-500 flex justify-between items-center">
+                        <span id="showingStudentsCount">Mostrando 0 estudiantes</span>
+                        <span class="text-slate-400">Total Matrícula MCS 2026</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center sm:flex sm:justify-between sm:items-center">
+            <p>© 2026 MCS - Sistema de Gestión e Información Administrativa.</p>
+            <p class="mt-2 sm:mt-0 text-slate-500">Administrador Maestro: Ramiro Aguilar</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: ADD / EDIT STUDENT -->
+    <div id="studentModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden fade-in">
+            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
+                <h3 id="studentModalTitle" class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-user-pen text-blue-400 mr-2"></i> Estudiante
+                </h3>
+                <button onclick="closeStudentModal()" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="studentForm" onsubmit="saveStudentForm(event)" class="p-6 space-y-4">
+                <input type="hidden" id="studentEditId">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nombre Completo del Estudiante</label>
+                    <input type="text" id="studentFullName" required placeholder="Ej: Acuña Zúñiga Giuliana" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Sección</label>
+                        <select id="studentSection" required class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Género</label>
+                        <select id="studentGender" required class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Programas / Distinciones (Separados por coma)</label>
+                    <input type="text" id="studentTags" placeholder="Ej: MATEM, Banda MCS, NI" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <p class="text-[11px] text-slate-400 mt-1">Opciones comunes: MATEM, Banda MCS, ESL, SAPI, NI, Intercambio</p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-end space-x-3">
+                    <button type="button" onclick="closeStudentModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition">Guardar Estudiante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ADMINISTRATORS MANAGEMENT -->
+    <div id="adminModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-xl w-full overflow-hidden fade-in">
+            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-user-shield text-amber-400 mr-2"></i> Gestión de Administradores
+                </h3>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- Add New Admin Form -->
+                <form onsubmit="handleAddAdmin(event)" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-slate-700 tracking-wider">Agregar Nuevo Administrador</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <input type="text" id="newAdminName" required placeholder="Nombre completo" class="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <input type="text" id="newAdminUser" required placeholder="Usuario" class="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <input type="password" id="newAdminPass" required placeholder="Contraseña" class="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg">
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center pt-1">
+                        <select id="newAdminRole" class="text-xs bg-white border border-slate-300 rounded-lg px-2 py-1">
+                            <option value="admin">Administrador Regular</option>
+                            <option value="master">Administrador Maestro</option>
+                        </select>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Registrar Admin
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Current Administrators List -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase text-slate-700 tracking-wider mb-2">Administradores Registrados</h4>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px]">
+                                <tr>
+                                    <th class="px-3 py-2">Nombre</th>
+                                    <th class="px-3 py-2">Usuario</th>
+                                    <th class="px-3 py-2">Rol</th>
+                                    <th class="px-3 py-2 text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminListTable" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button onclick="closeAdminModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 fade-in border border-slate-700">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMsg" class="text-xs font-medium">Operación realizada con éxito</span>
+    </div>
+
+    <!-- Firebase Module Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, collection, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration fallback
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mcs-2026-admin-portal';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : { apiKey: "demo", authDomain: "demo.firebaseapp.com", projectId: "demo-app", storageBucket: "demo.appspot.com" };
+
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+
+        // MASTER DATA SEEDING SETUP
+        const DEFAULT_SECTIONS = [
+            { id: '11-1', grade: '11', teacher: 'Vanessa Amador' },
+            { id: '11-2', grade: '11', teacher: 'Carolina Ordóñez' },
+            { id: '11-3', grade: '11', teacher: 'Danny Chaves' },
+            { id: '10-1', grade: '10', teacher: 'Joshua Serrano' },
+            { id: '10-2', grade: '10', teacher: 'Diego Villalobos' },
+            { id: '10-3', grade: '10', teacher: 'Mónica Granados' },
+            { id: '9-1', grade: '9', teacher: 'Natalia Briceño' },
+            { id: '9-2', grade: '9', teacher: 'Eddy Corrales' },
+            { id: '9-3', grade: '9', teacher: 'Ana Acuña' },
+            { id: '9-4', grade: '9', teacher: 'Ramiro Aguilar' },
+            { id: '8-1', grade: '8', teacher: 'Geovanny Rodríguez' },
+            { id: '8-2', grade: '8', teacher: 'María José Gamboa' },
+            { id: '8-3', grade: '8', teacher: 'Claudia García' },
+            { id: '7-1', grade: '7', teacher: 'Karla Hernández' },
+            { id: '7-2', grade: '7', teacher: 'Hillary Campos' },
+            { id: '7-3', grade: '7', teacher: 'Angelo Arias' }
+        ];
+
+        const INITIAL_STUDENTS = [
+            // 11-1
+            { name: "Acuña Zúñiga Giuliana", section: "11-1", gender: "F", tags: [] },
+            { name: "Arce Chanto Gabriel", section: "11-1", gender: "M", tags: ["MATEM"] },
+            { name: "Elliott Prittchard Oliver", section: "11-1", gender: "M", tags: ["SAPI"] },
+            { name: "Ellis Vargas Emma", section: "11-1", gender: "F", tags: [] },
+            { name: "Escobar Jiménez Mathías", section: "11-1", gender: "M", tags: ["MATEM"] },
+            { name: "García Aguirre Catalina", section: "11-1", gender: "F", tags: [] },
+            { name: "Gourzong Madriz Isabella", section: "11-1", gender: "F", tags: [] },
+            { name: "Hernández Zúñiga Krystel", section: "11-1", gender: "F", tags: [] },
+            { name: "Josbrant Loría Mattías", section: "11-1", gender: "M", tags: [] },
+            { name: "Lam Li Johnny", section: "11-1", gender: "M", tags: ["MATEM"] },
+            { name: "Morales Vargas Emily Johanna", section: "11-1", gender: "F", tags: ["MATEM"] },
+            { name: "Muñoz Chacón María Fernánda", section: "11-1", gender: "F", tags: ["MATEM"] },
+            { name: "Quesada Flores Emmanuel de Jesús", section: "11-1", gender: "M", tags: [] },
+            { name: "Soto Arias Dara Sofía", section: "11-1", gender: "F", tags: ["Banda MCS"] },
+            { name: "Valladares Corrales Felipe", section: "11-1", gender: "M", tags: [] },
+            { name: "Vargas Goyenaga Fiorella", section: "11-1", gender: "F", tags: [] },
+
+            // 11-2
+            { name: "Amador González Alex", section: "11-2", gender: "M", tags: [] },
+            { name: "Barillas Jaco Sebastián", section: "11-2", gender: "M", tags: ["MATEM"] },
+            { name: "Caravaca Jiménez Sofía", section: "11-2", gender: "F", tags: [] },
+            { name: "Escalante Molina Ignacio", section: "11-2", gender: "M", tags: [] },
+            { name: "Guevara Coto Valentina", section: "11-2", gender: "F", tags: ["NI"] },
+            { name: "Laitano Lobo Alessandro", section: "11-2", gender: "M", tags: ["MATEM"] },
+            { name: "Mesén Solórzano Fiorella", section: "11-2", gender: "F", tags: [] },
+            { name: "Mora Chaves Gabriel", section: "11-2", gender: "M", tags: ["MATEM"] },
+            { name: "Moraga Calderón Daniel", section: "11-2", gender: "M", tags: ["MATEM"] },
+            { name: "Quesada Sevilla Valeria", section: "11-2", gender: "F", tags: [] },
+            { name: "Salazar Valerio Alejandro", section: "11-2", gender: "M", tags: ["MATEM"] },
+            { name: "Sibaja Díaz Santiago", section: "11-2", gender: "M", tags: [] },
+            { name: "Soto Serrano Valeria", section: "11-2", gender: "F", tags: [] },
+            { name: "Vargas Wabe Emma", section: "11-2", gender: "F", tags: [] },
+
+            // 11-3
+            { name: "Barrientos González Josué", section: "11-3", gender: "M", tags: [] },
+            { name: "Calderón Yockchen Maily", section: "11-3", gender: "F", tags: [] },
+            { name: "Córdoba Fernandez Isabella", section: "11-3", gender: "F", tags: [] },
+            { name: "Dacosta Ulloa Aubree", section: "11-3", gender: "F", tags: [] },
+            { name: "Jiménez Piña María Jesús", section: "11-3", gender: "F", tags: ["MATEM"] },
+            { name: "Llobet Chanto Bruno", section: "11-3", gender: "M", tags: [] },
+            { name: "Monge Arguedas Mathias", section: "11-3", gender: "M", tags: [] },
+            { name: "Munguía Gutierrez Carlos", section: "11-3", gender: "M", tags: [] },
+            { name: "Obando Villalobos Fabiana Lucía", section: "11-3", gender: "F", tags: [] },
+            { name: "Oconitrillo Palma Daniel", section: "11-3", gender: "M", tags: [] },
+            { name: "Ortega Montes Eva María", section: "11-3", gender: "F", tags: ["MATEM"] },
+            { name: "Ramos Rodríguez Oscar", section: "11-3", gender: "M", tags: ["MATEM"] },
+            { name: "Rojas Zeledón Matías", section: "11-3", gender: "M", tags: ["MATEM"] },
+            { name: "Saborío Treminio Gabriel", section: "11-3", gender: "M", tags: ["MATEM"] },
+            { name: "Soto Lépiz Valeria", section: "11-3", gender: "F", tags: [] },
+            { name: "Taylor Solís Samantha", section: "11-3", gender: "F", tags: ["MATEM"] },
+            { name: "Trejos Quesada Mariana", section: "11-3", gender: "F", tags: [] },
+
+            // 10-1
+            { name: "Aguilar Fernández Mía", section: "10-1", gender: "F", tags: [] },
+            { name: "Alfaro Quesada Fernando Alonso", section: "10-1", gender: "M", tags: ["NI"] },
+            { name: "Álvarez Campos José Pablo", section: "10-1", gender: "M", tags: ["MATEM"] },
+            { name: "Azofeifa Monge Josué Daniel", section: "10-1", gender: "M", tags: ["MATEM"] },
+            { name: "Bolaños Quesada Esteban", section: "10-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Cedeño Medina Lucía Abigail", section: "10-1", gender: "F", tags: ["NI Oyente"] },
+            { name: "Centeno Herrera Gabriel", section: "10-1", gender: "M", tags: ["SAPI"] },
+            { name: "Feng Li Kendy", section: "10-1", gender: "F", tags: ["MATEM"] },
+            { name: "Jara Chavarría Sofía Priscilla", section: "10-1", gender: "F", tags: ["NI", "MATEM"] },
+            { name: "Lin Morales Elizabeth", section: "10-1", gender: "F", tags: ["MATEM"] },
+            { name: "Monge Álvarez Josué", section: "10-1", gender: "M", tags: ["MATEM", "Banda MCS"] },
+            { name: "Moraga López Caleb", section: "10-1", gender: "M", tags: ["NI"] },
+            { name: "Plänkers Charlotte", section: "10-1", gender: "F", tags: ["Intercambio Suiza"] },
+            { name: "Salas Víquez Nathalia", section: "10-1", gender: "F", tags: ["MATEM", "Banda MCS"] },
+            { name: "Solís González Mariana", section: "10-1", gender: "F", tags: ["MATEM"] },
+            { name: "Ugalde Mainieri María Lucía", section: "10-1", gender: "F", tags: [] },
+            { name: "Vargas Quirós Sofía", section: "10-1", gender: "F", tags: [] },
+            { name: "Villalobos Cerdas María de Jesús", section: "10-1", gender: "F", tags: ["MATEM"] },
+            { name: "Wayland Micah James", section: "10-1", gender: "M", tags: ["MATEM"] },
+            { name: "Zúñiga Solís Marcelo", section: "10-1", gender: "M", tags: [] },
+
+            // 10-2
+            { name: "Alvarado Rodríguez Valery", section: "10-2", gender: "F", tags: ["NI"] },
+            { name: "Arias Murillo Paula Victoria", section: "10-2", gender: "F", tags: [] },
+            { name: "Barquero Díaz Ignacio", section: "10-2", gender: "M", tags: [] },
+            { name: "Bryce Paez Samuel", section: "10-2", gender: "M", tags: ["MATEM"] },
+            { name: "Campos Quirce Isabella", section: "10-2", gender: "F", tags: ["SAPI"] },
+            { name: "Carrillo Murillo Mauricio", section: "10-2", gender: "M", tags: [] },
+            { name: "Cordero Aguilar Sofía", section: "10-2", gender: "F", tags: [] },
+            { name: "D´Amico Camila", section: "10-2", gender: "F", tags: ["Intercambio Italia"] },
+            { name: "Escoe Mora Mya", section: "10-2", gender: "F", tags: ["MATEM"] },
+            { name: "Fernández Martínez Mathías", section: "10-2", gender: "M", tags: [] },
+            { name: "Guzmán Chavarría María José", section: "10-2", gender: "F", tags: ["MATEM"] },
+            { name: "Jiménez Izaguirre Ariadna", section: "10-2", gender: "F", tags: [] },
+            { name: "Linter Hanna", section: "10-2", gender: "F", tags: ["Intercambio Alemania"] },
+            { name: "Morales Bonilla Sofía", section: "10-2", gender: "F", tags: ["MATEM"] },
+            { name: "Smith Barnett Ashley Elaine", section: "10-2", gender: "F", tags: ["MATEM"] },
+            { name: "Vindas Bryden Nayara", section: "10-2", gender: "F", tags: ["MATEM"] },
+
+            // 10-3
+            { name: "Álvarez Marín Felipe", section: "10-3", gender: "M", tags: [] },
+            { name: "Bermúdez Carranza Diego Esteban", section: "10-3", gender: "M", tags: [] },
+            { name: "Blanco Da Luz Santiago Alessandro", section: "10-3", gender: "M", tags: [] },
+            { name: "Bolaños Retana Fabiana", section: "10-3", gender: "F", tags: [] },
+            { name: "Botero Peña Thomas", section: "10-3", gender: "M", tags: [] },
+            { name: "Gómez Díaz Emily", section: "10-3", gender: "F", tags: ["Banda MCS"] },
+            { name: "Gregory Moss Brianna Iffe", section: "10-3", gender: "F", tags: [] },
+            { name: "Haug Sanabria Esteban", section: "10-3", gender: "M", tags: [] },
+            { name: "Jiménez Gutiérrez Ariana", section: "10-3", gender: "F", tags: [] },
+            { name: "Molina Mora Isabella", section: "10-3", gender: "F", tags: [] },
+            { name: "Mora Jiménez Isaac", section: "10-3", gender: "M", tags: ["NI"] },
+            { name: "Mora Mora Diana", section: "10-3", gender: "F", tags: [] },
+            { name: "Ortiz Fuentes Fabiana", section: "10-3", gender: "F", tags: [] },
+            { name: "Pérez Guzmán Isaac", section: "10-3", gender: "M", tags: [] },
+            { name: "Sánchez Casorla Matías", section: "10-3", gender: "M", tags: ["NI"] },
+            { name: "Tejeda Loria Gael", section: "10-3", gender: "M", tags: [] },
+            { name: "Wong Cubero Gloriana", section: "10-3", gender: "F", tags: [] },
+            { name: "Wong Godínez Valery", section: "10-3", gender: "F", tags: [] },
+
+            // 9-1
+            { name: "Arguello Barboza Domingo Esteban", section: "9-1", gender: "M", tags: [] },
+            { name: "Arias Carvajal Rebeca Andrea", section: "9-1", gender: "F", tags: [] },
+            { name: "Arroyo Cruz Valeria", section: "9-1", gender: "F", tags: [] },
+            { name: "Benavides Picado David", section: "9-1", gender: "M", tags: [] },
+            { name: "Castillo Acuña Valeria", section: "9-1", gender: "F", tags: [] },
+            { name: "Corrales Azofeifa Mathias", section: "9-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Fernández Martínez Noelia", section: "9-1", gender: "F", tags: [] },
+            { name: "López Ching Daniela", section: "9-1", gender: "F", tags: ["Banda MCS"] },
+            { name: "López Rivera Laia", section: "9-1", gender: "F", tags: [] },
+            { name: "Moncada López Samuel Jesús", section: "9-1", gender: "M", tags: [] },
+            { name: "Obregón Santos Sebastián David", section: "9-1", gender: "M", tags: [] },
+            { name: "Pereira Chaparro Derian Matías", section: "9-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Picado Rodríguez Fabian André", section: "9-1", gender: "M", tags: [] },
+            { name: "Salazar Cerdas Santiago", section: "9-1", gender: "M", tags: [] },
+            { name: "Sibaja Vargas Fabricio", section: "9-1", gender: "M", tags: [] },
+            { name: "Solís Ramírez Nicole", section: "9-1", gender: "F", tags: [] },
+            { name: "Villalobos Wang Isabella", section: "9-1", gender: "F", tags: [] },
+            { name: "Zárate Vargas Matías", section: "9-1", gender: "M", tags: [] },
+
+            // 9-2
+            { name: "Artavia Ramos Fiorella", section: "9-2", gender: "F", tags: ["NI"] },
+            { name: "Cedeño Medina Diego", section: "9-2", gender: "M", tags: ["NI"] },
+            { name: "Cordero Zamora Daniela", section: "9-2", gender: "F", tags: [] },
+            { name: "Elizondo Loaiza Andrés", section: "9-2", gender: "M", tags: [] },
+            { name: "Fonseca Mora Fabiana", section: "9-2", gender: "F", tags: [] },
+            { name: "García Aguirre Mariana", section: "9-2", gender: "F", tags: [] },
+            { name: "Mendoza De Carlo Antonio", section: "9-2", gender: "M", tags: [] },
+            { name: "Obando Villalobos Daniel", section: "9-2", gender: "M", tags: [] },
+            { name: "Prado Sánchez Amanda", section: "9-2", gender: "F", tags: [] },
+            { name: "Ramírez Fallas Mathias Eduardo", section: "9-2", gender: "M", tags: [] },
+            { name: "Rodríguez Molina William Esteban", section: "9-2", gender: "M", tags: [] },
+            { name: "Sáenz Chavarría Santiago", section: "9-2", gender: "M", tags: [] },
+            { name: "Ureña Espinoza Sofía María", section: "9-2", gender: "F", tags: [] },
+            { name: "Vargas Gómez Gabriel", section: "9-2", gender: "M", tags: ["Banda MCS"] },
+            { name: "Wo Ching Melissa", section: "9-2", gender: "F", tags: [] },
+
+            // 9-3
+            { name: "Arias Paniagua Santiago Josué", section: "9-3", gender: "M", tags: [] },
+            { name: "Barrantes Hekkema Josué Daniel", section: "9-3", gender: "M", tags: [] },
+            { name: "Camacho Soto Natalia", section: "9-3", gender: "F", tags: [] },
+            { name: "Chavarría Buendía Paula Elisa", section: "9-3", gender: "F", tags: [] },
+            { name: "Fernández López Mariana", section: "9-3", gender: "F", tags: [] },
+            { name: "Gómez Díaz José Ignacio", section: "9-3", gender: "M", tags: [] },
+            { name: "Lai Liu Ryan", section: "9-3", gender: "M", tags: [] },
+            { name: "León Salas Santiago", section: "9-3", gender: "M", tags: ["Banda MCS"] },
+            { name: "Llobet Chanto Emma", section: "9-3", gender: "F", tags: [] },
+            { name: "Mena Barrera Marco Antonio", section: "9-3", gender: "M", tags: [] },
+            { name: "Méndez Morales Mathias", section: "9-3", gender: "M", tags: [] },
+            { name: "Montero Rocha Mathías", section: "9-3", gender: "M", tags: [] },
+            { name: "Murillo Durán Daniel", section: "9-3", gender: "M", tags: [] },
+            { name: "Pineda Sibaja Daniela", section: "9-3", gender: "F", tags: [] },
+            { name: "Pirela Mata Ibrahim Alexander", section: "9-3", gender: "M", tags: [] },
+            { name: "Rojas Bolandi Diego Santiago", section: "9-3", gender: "M", tags: [] },
+            { name: "Rojas Castillo Valeria", section: "9-3", gender: "F", tags: [] },
+            { name: "Sánchez Casorla Olivia", section: "9-3", gender: "F", tags: [] },
+            { name: "Sánchez Díaz Larissa", section: "9-3", gender: "F", tags: [] },
+
+            // 9-4
+            { name: "Alpízar García Isabella", section: "9-4", gender: "F", tags: [] },
+            { name: "Barquero Cabrera Gabriel Adrián", section: "9-4", gender: "M", tags: [] },
+            { name: "Castellón Wong Isabella", section: "9-4", gender: "F", tags: ["SAPI"] },
+            { name: "Cedeño Molina Sara", section: "9-4", gender: "F", tags: [] },
+            { name: "Ching Rivera José Matias", section: "9-4", gender: "M", tags: [] },
+            { name: "Delgado Murillo Carlos Andrés", section: "9-4", gender: "M", tags: [] },
+            { name: "Fuentes Hine Emily", section: "9-4", gender: "F", tags: [] },
+            { name: "García Herra Mathew", section: "9-4", gender: "M", tags: ["Banda MCS"] },
+            { name: "González Mathews Kaleth", section: "9-4", gender: "M", tags: ["NI"] },
+            { name: "Gutiérrez Rojas Samuel", section: "9-4", gender: "M", tags: [] },
+            { name: "Jiménez Luna Camila", section: "9-4", gender: "F", tags: [] },
+            { name: "Jiménez Tencio Santiago Josué", section: "9-4", gender: "M", tags: ["Banda MCS"] },
+            { name: "Lorenzana Ching Fiorella", section: "9-4", gender: "F", tags: [] },
+            { name: "Montanaro Moya Zuriela", section: "9-4", gender: "F", tags: [] },
+            { name: "Pérez Suárez Alejandro", section: "9-4", gender: "M", tags: ["NI"] },
+            { name: "Quirós Fernández Maria Fernanda", section: "9-4", gender: "F", tags: [] },
+            { name: "Salazar Cartín Raquel", section: "9-4", gender: "F", tags: [] },
+            { name: "Sánchez Arguedas Gabriel Santiago", section: "9-4", gender: "M", tags: [] },
+
+            // 8-1
+            { name: "Abarca Porras Luciana", section: "8-1", gender: "F", tags: [] },
+            { name: "Alfaro Rodríguez Samantha", section: "8-1", gender: "F", tags: [] },
+            { name: "Arredondo Cerdas Nicolás", section: "8-1", gender: "M", tags: [] },
+            { name: "Barquero Diaz Felipe", section: "8-1", gender: "M", tags: [] },
+            { name: "Díaz Vargas Luciana", section: "8-1", gender: "F", tags: [] },
+            { name: "Jara Chavarría Jorge Isaac", section: "8-1", gender: "M", tags: ["NI", "ESL"] },
+            { name: "Lai Liu Max", section: "8-1", gender: "M", tags: [] },
+            { name: "Mora Chaves Sebastián", section: "8-1", gender: "M", tags: [] },
+            { name: "Mora Zúñiga Sara", section: "8-1", gender: "F", tags: ["NI"] },
+            { name: "Muñoz Zeledón Sofia", section: "8-1", gender: "F", tags: [] },
+            { name: "Murillo Camacho Victoria", section: "8-1", gender: "F", tags: [] },
+            { name: "Murillo Cartín Arabella", section: "8-1", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Rojas Navarrete Derek", section: "8-1", gender: "M", tags: ["NI", "ESL"] },
+            { name: "Romero Murillo José Eliel", section: "8-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Solera Portilla Mathias", section: "8-1", gender: "M", tags: [] },
+            { name: "Zhen Zheng Fei Long", section: "8-1", gender: "M", tags: ["ESL"] },
+
+            // 8-2
+            { name: "Abarca Jara Sofia", section: "8-2", gender: "F", tags: ["Banda MCS"] },
+            { name: "Azofeifa Monge Sofia", section: "8-2", gender: "F", tags: [] },
+            { name: "Beltrán Rodríguez Andrés", section: "8-2", gender: "M", tags: [] },
+            { name: "Cubero Muñoz Sara", section: "8-2", gender: "F", tags: [] },
+            { name: "Guerrero Chacón Gloriana", section: "8-2", gender: "F", tags: ["SAPI"] },
+            { name: "Gutiérrez Sanchez Nicolas", section: "8-2", gender: "M", tags: [] },
+            { name: "Jiménez Piña Maria Paula", section: "8-2", gender: "F", tags: [] },
+            { name: "Medina Lara Paola", section: "8-2", gender: "F", tags: ["SAPI"] },
+            { name: "Montero Aguilar Samuel", section: "8-2", gender: "M", tags: ["Banda MCS"] },
+            { name: "Quesada Flores Manuela", section: "8-2", gender: "F", tags: [] },
+            { name: "Rothe Ospino Carlos Enrique", section: "8-2", gender: "M", tags: [] },
+            { name: "Saenz Olivares Matthew", section: "8-2", gender: "M", tags: [] },
+            { name: "Sánchez Rojas Emma", section: "8-2", gender: "F", tags: [] },
+            { name: "Vargas Rosales Isabella", section: "8-2", gender: "F", tags: ["NI"] },
+            { name: "Wu Zhen Bryan", section: "8-2", gender: "M", tags: [] },
+            { name: "Zeledón Solano Daniela", section: "8-2", gender: "F", tags: [] },
+
+            // 8-3
+            { name: "Astorga Calvo Valeria", section: "8-3", gender: "F", tags: [] },
+            { name: "Beltrán Alaniz Sebastián", section: "8-3", gender: "M", tags: [] },
+            { name: "Brenes Muñiz Samuel Francisco", section: "8-3", gender: "M", tags: [] },
+            { name: "Céspedez Salazar Santiago David", section: "8-3", gender: "M", tags: ["Banda MCS"] },
+            { name: "Chavarria Salazar Montserrat", section: "8-3", gender: "F", tags: [] },
+            { name: "García Aubert Dana", section: "8-3", gender: "F", tags: [] },
+            { name: "González Martín Felisha", section: "8-3", gender: "F", tags: [] },
+            { name: "Guadamuz Murillo Sebastián", section: "8-3", gender: "M", tags: [] },
+            { name: "Gutiérrez Retana Tatiana", section: "8-3", gender: "F", tags: [] },
+            { name: "Montero Marabé Felipe", section: "8-3", gender: "M", tags: ["SAPI"] },
+            { name: "Morales Pérez Emma", section: "8-3", gender: "F", tags: [] },
+            { name: "Ortega Montes José Daniel", section: "8-3", gender: "M", tags: [] },
+            { name: "Pacheco Aguero Monserrat", section: "8-3", gender: "F", tags: ["SAPI"] },
+            { name: "Pulido Rodríguez Santiago", section: "8-3", gender: "M", tags: [] },
+            { name: "Ramírez Araya Naomi", section: "8-3", gender: "F", tags: [] },
+            { name: "Rojas Hernández Ian", section: "8-3", gender: "M", tags: [] },
+            { name: "Solano Quesada Valentina", section: "8-3", gender: "F", tags: [] },
+            { name: "Solano Zamora Abigail", section: "8-3", gender: "F", tags: [] },
+            { name: "Ureña Ramírez Maripaz", section: "8-3", gender: "F", tags: [] },
+            { name: "Vargas Monge Alejandro", section: "8-3", gender: "M", tags: [] },
+
+            // 7-1
+            { name: "Barrientos Sanabria Victoria", section: "7-1", gender: "F", tags: ["ESL"] },
+            { name: "Escobar Jiménez Samuel", section: "7-1", gender: "M", tags: ["ESL"] },
+            { name: "Herrera Aguilar Alexia", section: "7-1", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Lin Morales Alexander", section: "7-1", gender: "M", tags: [] },
+            { name: "Madrid Arguedas Isabella", section: "7-1", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Masis Solano María Fernanda", section: "7-1", gender: "F", tags: ["NI"] },
+            { name: "Mena Barrera Valentina", section: "7-1", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Monge Sánchez Saúl", section: "7-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Monge Valverde Mathias", section: "7-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Novoa Muñoz Isabella", section: "7-1", gender: "F", tags: ["Banda MCS"] },
+            { name: "Obando Quirós Josías", section: "7-1", gender: "M", tags: [] },
+            { name: "Odio Blanco Fabricio", section: "7-1", gender: "M", tags: ["Banda MCS"] },
+            { name: "Ramírez Páez Saúl", section: "7-1", gender: "M", tags: ["ESL"] },
+            { name: "Rivera Solís Sara", section: "7-1", gender: "F", tags: ["Banda MCS"] },
+            { name: "Trejos Solís Mariana", section: "7-1", gender: "F", tags: [] },
+            { name: "Wabe Lopéz Brianna", section: "7-1", gender: "F", tags: ["ESL"] },
+            { name: "Zárate Arguedas Montserrat", section: "7-1", gender: "F", tags: [] },
+            { name: "Zuñiga Rodŕíguez Isaac", section: "7-1", gender: "M", tags: ["ESL"] },
+
+            // 7-2
+            { name: "Alpízar Rojas Gabriel", section: "7-2", gender: "M", tags: [] },
+            { name: "Andrade Alfaro Emma Esther", section: "7-2", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Bermúdez Delgado Maripaz", section: "7-2", gender: "F", tags: ["ESL"] },
+            { name: "Calderón Ruíz Emanuel", section: "7-2", gender: "M", tags: ["ESL"] },
+            { name: "Chaves Aguilar Santiago", section: "7-2", gender: "M", tags: ["Banda MCS"] },
+            { name: "Cisne Acuña Isabella", section: "7-2", gender: "F", tags: ["ESL", "Banda MCS"] },
+            { name: "Coto Quirós Lucas", section: "7-2", gender: "M", tags: [] },
+            { name: "Gutiérrez Olmos Rebeca", section: "7-2", gender: "F", tags: ["Banda MCS"] },
+            { name: "Jara Bolaños Fabricio", section: "7-2", gender: "M", tags: ["ESL"] },
+            { name: "Juarez Hernández Nicole", section: "7-2", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Jiménez Delgado Mathias", section: "7-2", gender: "M", tags: ["Banda MCS"] },
+            { name: "Montero Granados Benjamin Josué", section: "7-2", gender: "M", tags: ["NI"] },
+            { name: "Mora Castellón Daniel", section: "7-2", gender: "M", tags: ["ESL"] },
+            { name: "Mora Czech Emma", section: "7-2", gender: "F", tags: [] },
+            { name: "Mora Novoa Valentina", section: "7-2", gender: "F", tags: ["NI", "ESL"] },
+            { name: "Piedra Morales Raquel", section: "7-2", gender: "F", tags: ["ESL"] },
+            { name: "Salazar Ruiz Emilio Andrés", section: "7-2", gender: "M", tags: ["NI", "ESL"] },
+            { name: "Solano Elizondo Isabella", section: "7-2", gender: "F", tags: [] },
+
+            // 7-3
+            { name: "Arias García Teodoro", section: "7-3", gender: "M", tags: [] },
+            { name: "Carmona Porras Antonio", section: "7-3", gender: "M", tags: [] },
+            { name: "Carrillo Zamora Pablo", section: "7-3", gender: "M", tags: ["Banda MCS"] },
+            { name: "Cubillo Montiel Cassandra", section: "7-3", gender: "F", tags: ["Banda MCS"] },
+            { name: "Delgado Coto José Felipe", section: "7-3", gender: "M", tags: ["Banda MCS"] },
+            { name: "Godínez Briceño Elias", section: "7-3", gender: "M", tags: [] },
+            { name: "Gómez Díaz Camila", section: "7-3", gender: "F", tags: ["Banda MCS"] },
+            { name: "Hernández Calvo Jorge Andrés", section: "7-3", gender: "M", tags: [] },
+            { name: "Lizano Rodriguez Victoria", section: "7-3", gender: "F", tags: [] },
+            { name: "Méndez Solano Nazareth Sofía", section: "7-3", gender: "F", tags: [] },
+            { name: "Monestel Vega Paula", section: "7-3", gender: "F", tags: ["Banda MCS"] },
+            { name: "Montoya Rubié Esteban", section: "7-3", gender: "M", tags: [] },
+            { name: "Morales Bonilla Gabriel", section: "7-3", gender: "M", tags: [] },
+            { name: "Obando Fonseca Sofía", section: "7-3", gender: "F", tags: ["Banda MCS"] },
+            { name: "Paniagua Eduarte Carlos", section: "7-3", gender: "M", tags: ["NI"] },
+            { name: "Rivera Quesada Alisson", section: "7-3", gender: "F", tags: [] },
+            { name: "Sequeira Flores Fernanda", section: "7-3", gender: "F", tags: [] },
+            { name: "Zeledón Quirós Emily", section: "7-3", gender: "F", tags: [] }
+        ];
+
+        // State Store
+        let state = {
+            admins: [],
+            students: [],
+            sections: DEFAULT_SECTIONS,
+            activeTab: 'resumen',
+            sectionGradeFilter: 'ALL',
+            charts: {}
+        };
+
+        // Initialize Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            // Auth flow
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                signInWithCustomToken(auth, __initial_auth_token).catch(() => signInAnonymously(auth));
+            } else {
+                signInAnonymously(auth);
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    await setupRealtimeListeners();
+                }
+            });
+        } catch (e) {
+            console.warn("Firebase initialized in fallback offline mode.");
+            loadInitialFallbackData();
+        }
+
+        // Listener for Firestore
+        async function setupRealtimeListeners() {
+            // Path compliance: /artifacts/{appId}/public/data/{collection}
+            const adminsCol = collection(db, 'artifacts', appId, 'public', 'data', 'admins');
+            const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+
+            // Seed Admins if empty
+            onSnapshot(adminsCol, async (snapshot) => {
+                if (snapshot.empty) {
+                    // Seed Ramiro Aguilar Master Admin
+                    await setDoc(doc(adminsCol, 'ramiro_master'), {
+                        name: "Ramiro Aguilar",
+                        username: "ramiroaguilar",
+                        password: "raguilar111",
+                        role: "master",
+                        createdAt: new Date().toISOString()
+                    });
+                } else {
+                    state.admins = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                    renderAdminList();
+                }
+            }, (err) => console.error(err));
+
+            // Seed Students if empty
+            onSnapshot(studentsCol, async (snapshot) => {
+                if (snapshot.empty) {
+                    // Bulk Seed
+                    for (let i = 0; i < INITIAL_STUDENTS.length; i++) {
+                        const st = INITIAL_STUDENTS[i];
+                        await addDoc(studentsCol, st);
+                    }
+                } else {
+                    state.students = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                    refreshUI();
+                }
+            }, (err) => console.error(err));
+        }
+
+        function loadInitialFallbackData() {
+            state.admins = [{
+                id: 'ramiro_master',
+                name: "Ramiro Aguilar",
+                username: "ramiroaguilar",
+                password: "raguilar111",
+                role: "master"
+            }];
+            state.students = INITIAL_STUDENTS.map((s, idx) => ({ id: `st_${idx}`, ...s }));
+            refreshUI();
+        }
+
+        // Authentication Handler
+        window.handleLogin = function(e) {
+            e.preventDefault();
+            const userIn = document.getElementById('loginUsername').value.trim();
+            const passIn = document.getElementById('loginPassword').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+
+            // Search admin credentials
+            const foundAdmin = state.admins.find(a => 
+                a.username.toLowerCase() === userIn.toLowerCase() && a.password === passIn
+            );
+
+            if (foundAdmin) {
+                currentUser = foundAdmin;
+                alertBox.classList.add('hidden');
+                document.getElementById('loginView').classList.add('hidden');
+                document.getElementById('dashboardView').classList.remove('hidden');
+                document.getElementById('userHeaderActions').classList.remove('hidden');
+                
+                document.getElementById('currentUserDisplay').innerText = currentUser.name;
+                document.getElementById('currentUserRole').innerText = currentUser.role === 'master' ? 'Administrador Maestro' : 'Administrador';
+
+                if (currentUser.role === 'master') {
+                    document.getElementById('btnAdminMgmt').classList.remove('hidden');
+                    document.getElementById('btnAdminMgmt').classList.add('flex');
+                } else {
+                    document.getElementById('btnAdminMgmt').classList.add('hidden');
+                }
+
+                showToast(`Bienvenido/a, ${currentUser.name}`);
+                refreshUI();
+            } else {
+                alertBox.innerText = 'Usuario o contraseña incorrectos.';
+                alertBox.classList.remove('hidden');
+            }
+        };
+
+        window.logoutAdmin = function() {
+            currentUser = null;
+            document.getElementById('loginView').classList.remove('hidden');
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('userHeaderActions').classList.add('hidden');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            showToast('Sesión cerrada correctamente');
+        };
+
+        // UI Refresh Controller
+        function refreshUI() {
+            updateMetrics();
+            renderCharts();
+            renderGuideTeachersTable();
+            renderSectionsGrid();
+            populateSectionSelects();
+            renderStudentsTable();
+        }
+
+        function updateMetrics() {
+            document.getElementById('statTotalStudents').innerText = state.students.length;
+            document.getElementById('statTotalSections').innerText = state.sections.length;
+
+            let matem = 0, banda = 0, esl = 0, ni = 0;
+            state.students.forEach(s => {
+                if (s.tags && Array.isArray(s.tags)) {
+                    if (s.tags.includes('MATEM')) matem++;
+                    if (s.tags.includes('Banda MCS')) banda++;
+                    if (s.tags.includes('ESL')) esl++;
+                    if (s.tags.some(t => t.includes('NI'))) ni++;
+                }
+            });
+
+            document.getElementById('statMatemCount').innerText = matem;
+            document.getElementById('statBandaCount').innerText = banda;
+            document.getElementById('statEslCount').innerText = esl;
+            document.getElementById('statNiCount').innerText = ni;
+        }
+
+        function renderGuideTeachersTable() {
+            const tbody = document.getElementById('guideTeachersTable');
+            tbody.innerHTML = '';
+
+            state.sections.forEach(sec => {
+                const secStudents = state.students.filter(s => s.section === sec.id);
+                const females = secStudents.filter(s => s.gender === 'F').length;
+                const males = secStudents.filter(s => s.gender === 'M').length;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+                tr.innerHTML = `
+                    <td class="px-5 py-3 font-bold text-blue-600">${sec.id}</td>
+                    <td class="px-5 py-3 text-slate-500">${sec.grade}° Año</td>
+                    <td class="px-5 py-3 font-medium text-slate-800">${sec.teacher}</td>
+                    <td class="px-5 py-3 text-center font-bold text-slate-900">${secStudents.length}</td>
+                    <td class="px-5 py-3 text-center text-pink-600 font-semibold">${females}</td>
+                    <td class="px-5 py-3 text-center text-blue-600 font-semibold">${males}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderSectionsGrid() {
+            const grid = document.getElementById('sectionsGrid');
+            grid.innerHTML = '';
+
+            const filteredSections = state.sectionGradeFilter === 'ALL'
+                ? state.sections
+                : state.sections.filter(s => s.grade === state.sectionGradeFilter);
+
+            filteredSections.forEach(sec => {
+                const secStudents = state.students.filter(s => s.section === sec.id);
+                const females = secStudents.filter(s => s.gender === 'F').length;
+                const males = secStudents.filter(s => s.gender === 'M').length;
+
+                // Collect tags summary
+                const tagCounts = {};
+                secStudents.forEach(st => {
+                    if (st.tags) {
+                        st.tags.forEach(t => {
+                            tagCounts[t] = (tagCounts[t] || 0) + 1;
+                        });
+                    }
+                });
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition flex flex-col';
+                card.innerHTML = `
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">${sec.grade}° Grado</span>
+                            <h3 class="text-xl font-bold">Sección ${sec.id}</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-blue-600/30 text-blue-300 border border-blue-500/40 px-2.5 py-1 rounded-lg text-xs font-bold">
+                                ${secStudents.length} Estudiantes
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-grow space-y-3">
+                        <div class="text-xs text-slate-600 flex items-center">
+                            <i class="fa-solid fa-chalkboard-user text-indigo-500 mr-2"></i>
+                            <span>Guía: <strong class="text-slate-800">${sec.teacher}</strong></span>
+                        </div>
+
+                        <div class="flex items-center space-x-4 text-xs font-semibold py-2 border-y border-slate-100">
+                            <span class="text-pink-600 flex items-center"><i class="fa-solid fa-venus mr-1"></i> ${females} Mujeres</span>
+                            <span class="text-blue-600 flex items-center"><i class="fa-solid fa-mars mr-1"></i> ${males} Hombres</span>
+                        </div>
+
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            ${Object.entries(tagCounts).map(([tag, cnt]) => `
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                    ${tag}: <strong class="text-blue-600">${cnt}</strong>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 px-4 py-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                        <button onclick="viewSectionStudents('${sec.id}')" class="text-blue-600 hover:text-blue-800 font-bold flex items-center">
+                            Ver Lista Lista (${secStudents.length}) <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function populateSectionSelects() {
+            const secFilter = document.getElementById('sectionFilter');
+            const studentSecSelect = document.getElementById('studentSection');
+            
+            const currentSecFilterVal = secFilter.value;
+            secFilter.innerHTML = '<option value="">Todas las Secciones</option>';
+            studentSecSelect.innerHTML = '';
+
+            state.sections.forEach(sec => {
+                secFilter.innerHTML += `<option value="${sec.id}">${sec.id} (${sec.teacher})</option>`;
+                studentSecSelect.innerHTML += `<option value="${sec.id}">${sec.id} - ${sec.teacher}</option>`;
+            });
+
+            secFilter.value = currentSecFilterVal;
+        }
+
+        window.renderStudentsTable = function() {
+            const tbody = document.getElementById('studentsTableBody');
+            const searchVal = document.getElementById('studentSearchInput').value.toLowerCase().trim();
+            const secVal = document.getElementById('sectionFilter').value;
+            const tagVal = document.getElementById('tagFilter').value;
+
+            tbody.innerHTML = '';
+
+            let filtered = state.students.filter(s => {
+                const matchesName = s.name.toLowerCase().includes(searchVal);
+                const matchesSec = secVal ? s.section === secVal : true;
+                const matchesTag = tagVal ? (s.tags && s.tags.some(t => t.includes(tagVal))) : true;
+                return matchesName && matchesSec && matchesTag;
+            });
+
+            // Sort alphabetically by name
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+            document.getElementById('showingStudentsCount').innerText = `Mostrando ${filtered.length} de ${state.students.length} estudiantes`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-4 py-8 text-center text-slate-400 text-xs">
+                            No se encontraron estudiantes con los criterios especificados.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach((st, idx) => {
+                const secObj = state.sections.find(sec => sec.id === st.section) || { teacher: 'N/A' };
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+
+                const tagsBadgeHtml = (st.tags || []).map(t => {
+                    let colorClass = 'bg-slate-100 text-slate-700 border-slate-200';
+                    if (t.includes('MATEM')) colorClass = 'bg-amber-50 text-amber-700 border-amber-200';
+                    if (t.includes('Banda')) colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                    if (t.includes('ESL')) colorClass = 'bg-purple-50 text-purple-700 border-purple-200';
+                    if (t.includes('SAPI')) colorClass = 'bg-rose-50 text-rose-700 border-rose-200';
+                    if (t.includes('NI')) colorClass = 'bg-sky-50 text-sky-700 border-sky-200';
+                    return `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${colorClass} mr-1 my-0.5">${t}</span>`;
+                }).join('');
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 text-slate-400 font-mono text-xs">${idx + 1}</td>
+                    <td class="px-4 py-3 font-semibold text-slate-900">${st.name}</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-bold text-xs">${st.section}</span></td>
+                    <td class="px-4 py-3 text-slate-600 text-xs">${secObj.teacher}</td>
+                    <td class="px-4 py-3">${tagsBadgeHtml || '<span class="text-slate-300 text-xs">-</span>'}</td>
+                    <td class="px-4 py-3 text-right space-x-1">
+                        <button onclick="editStudent('${st.id}')" class="p-1.5 text-slate-500 hover:text-blue-600 rounded hover:bg-slate-100 transition" title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteStudent('${st.id}', '${st.name}')" class="p-1.5 text-slate-500 hover:text-red-600 rounded hover:bg-slate-100 transition" title="Eliminar">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        function renderCharts() {
+            // Chart 1: Students per Grade
+            const gradeCounts = { '7': 0, '8': 0, '9': 0, '10': 0, '11': 0 };
+            state.students.forEach(s => {
+                const g = s.section ? s.section.split('-')[0] : '';
+                if (gradeCounts[g] !== undefined) gradeCounts[g]++;
+            });
+
+            const ctxGrade = document.getElementById('chartGrades')?.getContext('2d');
+            if (ctxGrade) {
+                if (state.charts.grades) state.charts.grades.destroy();
+                state.charts.grades = new Chart(ctxGrade, {
+                    type: 'bar',
+                    data: {
+                        labels: ['7° Año', '8° Año', '9° Año', '10° Año', '11° Año'],
+                        datasets: [{
+                            label: 'Estudiantes',
+                            data: [gradeCounts['7'], gradeCounts['8'], gradeCounts['9'], gradeCounts['10'], gradeCounts['11']],
+                            backgroundColor: '#2563eb',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+
+            // Chart 2: Program Tag Breakdown
+            let matem = 0, banda = 0, esl = 0, sapi = 0, ni = 0;
+            state.students.forEach(s => {
+                if (s.tags) {
+                    if (s.tags.includes('MATEM')) matem++;
+                    if (s.tags.includes('Banda MCS')) banda++;
+                    if (s.tags.includes('ESL')) esl++;
+                    if (s.tags.includes('SAPI')) sapi++;
+                    if (s.tags.some(t => t.includes('NI'))) ni++;
+                }
+            });
+
+            const ctxProg = document.getElementById('chartPrograms')?.getContext('2d');
+            if (ctxProg) {
+                if (state.charts.programs) state.charts.programs.destroy();
+                state.charts.programs = new Chart(ctxProg, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['MATEM', 'Banda MCS', 'ESL', 'SAPI / Apoyo', 'Nuevo Ingreso'],
+                        datasets: [{
+                            data: [matem, banda, esl, sapi, ni],
+                            backgroundColor: ['#d97706', '#059669', '#9333ea', '#e11d48', '#0284c7']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+                    }
+                });
+            }
+        }
+
+        window.openAddStudentModal = function() {
+            document.getElementById('studentModalTitle').innerText = 'Nuevo Estudiante';
+            document.getElementById('studentEditId').value = '';
+            document.getElementById('studentFullName').value = '';
+            document.getElementById('studentGender').value = 'M';
+            document.getElementById('studentTags').value = '';
+            document.getElementById('studentModal').classList.remove('hidden');
+        };
+
+        window.editStudent = function(id) {
+            const st = state.students.find(s => s.id === id);
+            if (!st) return;
+
+            document.getElementById('studentModalTitle').innerText = 'Editar Estudiante';
+            document.getElementById('studentEditId').value = st.id;
+            document.getElementById('studentFullName').value = st.name;
+            document.getElementById('studentSection').value = st.section;
+            document.getElementById('studentGender').value = st.gender || 'M';
+            document.getElementById('studentTags').value = (st.tags || []).join(', ');
+            document.getElementById('studentModal').classList.remove('hidden');
+        };
+
+        window.closeStudentModal = function() {
+            document.getElementById('studentModal').classList.add('hidden');
+        };
+
+        window.saveStudentForm = async function(e) {
+            e.preventDefault();
+            const editId = document.getElementById('studentEditId').value;
+            const name = document.getElementById('studentFullName').value.trim();
+            const section = document.getElementById('studentSection').value;
+            const gender = document.getElementById('studentGender').value;
+            const tagsInput = document.getElementById('studentTags').value;
+
+            const tags = tagsInput.split(',')
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+
+            const payload = { name, section, gender, tags };
+
+            try {
+                if (db) {
+                    const studentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'students');
+                    if (editId) {
+                        await updateDoc(doc(studentsCol, editId), payload);
+                    } else {
+                        await addDoc(studentsCol, payload);
+                    }
+                } else {
+                    if (editId) {
+                        const idx = state.students.findIndex(s => s.id === editId);
+                        if (idx !== -1) state.students[idx] = { id: editId, ...payload };
+                    } else {
+                        state.students.push({ id: `st_${Date.now()}`, ...payload });
+                    }
+                    refreshUI();
+                }
+
+                closeStudentModal();
+                showToast(editId ? 'Estudiante actualizado' : 'Estudiante guardado correctamente');
+            } catch (err) {
+                console.error(err);
+                showToast('Ocurrió un error al guardar', true);
+            }
+        };
+
+        window.deleteStudent = async function(id, name) {
+            // Confirmation via custom confirm box behavior or UI message
+            if (window.confirm(`¿Está seguro/a de que desea eliminar a "${name}"?`)) {
+                try {
+                    if (db) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'students', id);
+                        await deleteDoc(docRef);
+                    } else {
+                        state.students = state.students.filter(s => s.id !== id);
+                        refreshUI();
+                    }
+                    showToast('Estudiante eliminado');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Error al eliminar', true);
+                }
+            }
+        };
+
+        window.openAdminModal = function() {
+            renderAdminList();
+            document.getElementById('adminModal').classList.remove('hidden');
+        };
+
+        window.closeAdminModal = function() {
+            document.getElementById('adminModal').classList.add('hidden');
+        };
+
+        function renderAdminList() {
+            const tbody = document.getElementById('adminListTable');
+            tbody.innerHTML = '';
+
+            state.admins.forEach(adm => {
+                const tr = document.createElement('tr');
+                const isMaster = adm.role === 'master';
+                tr.innerHTML = `
+                    <td class="px-3 py-2 font-semibold text-slate-800">${adm.name}</td>
+                    <td class="px-3 py-2 font-mono text-slate-600 text-[11px]">${adm.username}</td>
+                    <td class="px-3 py-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isMaster ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
+                            ${isMaster ? 'Maestro' : 'Regular'}
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        ${!isMaster ? `
+                            <button onclick="deleteAdmin('${adm.id}', '${adm.name}')" class="text-red-500 hover:text-red-700 transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        ` : '<span class="text-slate-300">-</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.handleAddAdmin = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('newAdminName').value.trim();
+            const username = document.getElementById('newAdminUser').value.trim().toLowerCase();
+            const password = document.getElementById('newAdminPass').value.trim();
+            const role = document.getElementById('newAdminRole').value;
+
+            // Check if username exists
+            if (state.admins.some(a => a.username === username)) {
+                showToast('El usuario ya existe', true);
+                return;
+            }
+
+            const newAdminData = { name, username, password, role, createdAt: new Date().toISOString() };
+
+            try {
+                if (db) {
+                    const adminsCol = collection(db, 'artifacts', appId, 'public', 'data', 'admins');
+                    await addDoc(adminsCol, newAdminData);
+                } else {
+                    state.admins.push({ id: `adm_${Date.now()}`, ...newAdminData });
+                    renderAdminList();
+                }
+
+                document.getElementById('newAdminName').value = '';
+                document.getElementById('newAdminUser').value = '';
+                document.getElementById('newAdminPass').value = '';
+                showToast('Nuevo administrador agregado');
+            } catch (err) {
+                console.error(err);
+                showToast('Error al agregar administrador', true);
+            }
+        };
+
+        window.deleteAdmin = async function(id, name) {
+            if (window.confirm(`¿Desea remover el acceso de administrador a ${name}?`)) {
+                try {
+                    if (db) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'admins', id);
+                        await deleteDoc(docRef);
+                    } else {
+                        state.admins = state.admins.filter(a => a.id !== id);
+                        renderAdminList();
+                    }
+                    showToast('Administrador eliminado');
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+
+        window.switchTab = function(tabName) {
+            state.activeTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition';
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            const activeContent = document.getElementById(`content-${tabName}`);
+
+            if (activeBtn) activeBtn.className = 'tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition bg-blue-600 text-white shadow-sm';
+            if (activeContent) activeContent.classList.remove('hidden');
+
+            if (tabName === 'estudiantes') {
+                renderStudentsTable();
+            }
+        };
+
+        window.filterSectionsGrade = function(grade) {
+            state.sectionGradeFilter = grade;
+            document.querySelectorAll('.sec-grade-btn').forEach(btn => {
+                btn.className = 'sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition';
+            });
+            const activeBtn = document.getElementById(`sec-btn-${grade}`);
+            if (activeBtn) activeBtn.className = 'sec-grade-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-blue-600 text-white';
+            renderSectionsGrid();
+        };
+
+        window.viewSectionStudents = function(sectionId) {
+            switchTab('estudiantes');
+            document.getElementById('sectionFilter').value = sectionId;
+            renderStudentsTable();
+        };
+
+        window.resetStudentFilters = function() {
+            document.getElementById('studentSearchInput').value = '';
+            document.getElementById('sectionFilter').value = '';
+            document.getElementById('tagFilter').value = '';
+            renderStudentsTable();
+        };
+
+        window.copyShareLink = function() {
+            const currentUrl = window.location.href;
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = currentUrl;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+
+            showToast('¡Link del portal copiado al portapapeles!');
+        };
+
+        window.exportToCSV = function() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Nombre Completo,Seccion,Docente Guia,Genero,Programas\n";
+
+            state.students.forEach(s => {
+                const sec = state.sections.find(sc => sc.id === s.section) || { teacher: '' };
+                const tagsStr = (s.tags || []).join(';');
+                csvContent += `"${s.name}","${s.section}","${sec.teacher}","${s.gender || 'M'}","${tagsStr}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `MCS_2026_Lista_Estudiantes.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('Archivo CSV generado y descargado');
+        };
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = message;
+            if (isError) {
+                toastIcon.className = 'fa-solid fa-circle-exclamation text-red-400 text-lg';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
