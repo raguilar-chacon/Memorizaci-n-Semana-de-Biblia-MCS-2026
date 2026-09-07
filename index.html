@@ -360,11 +360,11 @@
   <!-- LOGIC SCRIPT -->
   <script>
     const DEFAULT_SECTIONS = [
-      "7-1", "7-2", "7-3", "7-4",
-      "8-1", "8-2", "8-3", "8-4",
+      "7-1", "7-2", "7-3",
+      "8-1", "8-2", "8-3",
       "9-1", "9-2", "9-3", "9-4",
-      "10-1", "10-2", "10-3", "10-4",
-      "11-1", "11-2", "11-3", "11-4"
+      "10-1", "10-2", "10-3",
+      "11-1", "11-2", "11-3"
     ];
 
     const INITIAL_VERSES = [
@@ -375,16 +375,314 @@
     ];
 
     const INITIAL_STUDENTS_MAP = [
-      { name: "Mateo Alvarado Vargas", section: "7-1", gender: "M" },
-      { name: "Valeria Castillo Rojas", section: "7-1", gender: "F" },
-      { name: "Santiago Jiménez Castro", section: "8-2", gender: "M" },
-      { name: "Camila Fernández Solano", section: "8-2", gender: "F" },
-      { name: "Gabriel Mora Chaves", section: "9-3", gender: "M" },
-      { name: "Lucía Araya Quesada", section: "9-3", gender: "F" },
-      { name: "Sebastián Navarro Soto", section: "10-1", gender: "M" },
-      { name: "Emma Monge Cordero", section: "10-1", gender: "F" },
-      { name: "Daniela Brenes Aguilar", section: "11-4", gender: "F" },
-      { name: "Alejandro Fallas Valverde", section: "11-4", gender: "M" }
+      // 7-1 (Karla Hernández)
+      { name: "Barrientos Sanabria Victoria (ESL)", section: "7-1", gender: "F" },
+      { name: "Escobar Jiménez Samuel (ESL)", section: "7-1", gender: "M" },
+      { name: "Herrera Aguilar Alexia (NI - ESL)", section: "7-1", gender: "F" },
+      { name: "Lin Morales Alexander", section: "7-1", gender: "M" },
+      { name: "Madrid Arguedas Isabella (NI - ESL)", section: "7-1", gender: "F" },
+      { name: "Masis Solano María Fernanda (NI)", section: "7-1", gender: "F" },
+      { name: "Mena Barrera Valentina (NI - ESL)", section: "7-1", gender: "F" },
+      { name: "Monge Sánchez Saúl (Banda MCS)", section: "7-1", gender: "M" },
+      { name: "Monge Valverde Mathias (Banda MCS)", section: "7-1", gender: "M" },
+      { name: "Novoa Muñoz Isabella (Banda MCS)", section: "7-1", gender: "F" },
+      { name: "Obando Quirós Josías", section: "7-1", gender: "M" },
+      { name: "Odio Blanco Fabricio (Banda MCS)", section: "7-1", gender: "M" },
+      { name: "Ramírez Páez Saúl (ESL)", section: "7-1", gender: "M" },
+      { name: "Rivera Solís Sara (Banda MCS)", section: "7-1", gender: "F" },
+      { name: "Trejos Solís Mariana", section: "7-1", gender: "F" },
+      { name: "Wabe Lopéz Brianna (ESL)", section: "7-1", gender: "F" },
+      { name: "Zárate Arguedas Montserrat", section: "7-1", gender: "F" },
+      { name: "Zuñiga Rodŕíguez Isaac (ESL)", section: "7-1", gender: "M" },
+
+      // 7-2 (Hillary Campos)
+      { name: "Alpízar Rojas Gabriel", section: "7-2", gender: "M" },
+      { name: "Andrade Alfaro Emma Esther (NI - ESL)", section: "7-2", gender: "F" },
+      { name: "Bermúdez Delgado Maripaz (ESL)", section: "7-2", gender: "F" },
+      { name: "Calderón Ruíz Emanuel (ESL)", section: "7-2", gender: "M" },
+      { name: "Chaves Aguilar Santiago (Banda MCS)", section: "7-2", gender: "M" },
+      { name: "Cisne Acuña Isabella (ESL - Banda MCS)", section: "7-2", gender: "F" },
+      { name: "Coto Quirós Lucas", section: "7-2", gender: "M" },
+      { name: "Gutiérrez Olmos Rebeca (Banda MCS)", section: "7-2", gender: "F" },
+      { name: "Jara Bolaños Fabricio (ESL)", section: "7-2", gender: "M" },
+      { name: "Juarez Hernández Nicole (NI - ESL)", section: "7-2", gender: "F" },
+      { name: "Jiménez Delgado Mathias (Banda MCS)", section: "7-2", gender: "M" },
+      { name: "Montero Granados Benjamin Josué (NI)", section: "7-2", gender: "M" },
+      { name: "Mora Castellón Daniel (ESL)", section: "7-2", gender: "M" },
+      { name: "Mora Czech Emma", section: "7-2", gender: "F" },
+      { name: "Mora Novoa Valentina (NI - ESL)", section: "7-2", gender: "F" },
+      { name: "Piedra Morales Raquel (ESL)", section: "7-2", gender: "F" },
+      { name: "Salazar Ruiz Emilio Andrés (NI - ESL)", section: "7-2", gender: "M" },
+      { name: "Solano Elizondo Isabella", section: "7-2", gender: "F" },
+
+      // 7-3 (Angelo Arias)
+      { name: "Arias García Teodoro", section: "7-3", gender: "M" },
+      { name: "Carmona Porras Antonio", section: "7-3", gender: "M" },
+      { name: "Carrillo Zamora Pablo (Banda MCS)", section: "7-3", gender: "M" },
+      { name: "Cubillo Montiel Cassandra (Banda MCS)", section: "7-3", gender: "F" },
+      { name: "Delgado Coto José Felipe (Banda MCS)", section: "7-3", gender: "M" },
+      { name: "Godínez Briceño Elias", section: "7-3", gender: "M" },
+      { name: "Gómez Díaz Camila (Banda MCS)", section: "7-3", gender: "F" },
+      { name: "Hernández Calvo Jorge Andrés", section: "7-3", gender: "M" },
+      { name: "Lizano Rodriguez Victoria", section: "7-3", gender: "F" },
+      { name: "Méndez Solano Nazareth Sofía", section: "7-3", gender: "F" },
+      { name: "Monestel Vega Paula (Banda MCS)", section: "7-3", gender: "F" },
+      { name: "Montoya Rubié Esteban", section: "7-3", gender: "M" },
+      { name: "Morales Bonilla Gabriel", section: "7-3", gender: "M" },
+      { name: "Obando Fonseca Sofía (Banda MCS)", section: "7-3", gender: "F" },
+      { name: "Paniagua Eduarte Carlos (NI)", section: "7-3", gender: "M" },
+      { name: "Rivera Quesada Alisson", section: "7-3", gender: "F" },
+      { name: "Sequeira Flores Fernanda", section: "7-3", gender: "F" },
+      { name: "Zeledón Quirós Emily", section: "7-3", gender: "F" },
+
+      // 8-1 (Geovanny Rodríguez)
+      { name: "Abarca Porras Luciana", section: "8-1", gender: "F" },
+      { name: "Alfaro Rodríguez Samantha", section: "8-1", gender: "F" },
+      { name: "Arredondo Cerdas Nicolás", section: "8-1", gender: "M" },
+      { name: "Barquero Diaz Felipe", section: "8-1", gender: "M" },
+      { name: "Díaz Vargas Luciana", section: "8-1", gender: "F" },
+      { name: "Jara Chavarría Jorge Isaac (NI - ESL)", section: "8-1", gender: "M" },
+      { name: "Lai Liu Max", section: "8-1", gender: "M" },
+      { name: "Mora Chaves Sebastián", section: "8-1", gender: "M" },
+      { name: "Mora Zúñiga Sara (NI)", section: "8-1", gender: "F" },
+      { name: "Muñoz Zeledón Sofia", section: "8-1", gender: "F" },
+      { name: "Murillo Camacho Victoria", section: "8-1", gender: "F" },
+      { name: "Murillo Cartín Arabella (NI - ESL)", section: "8-1", gender: "F" },
+      { name: "Rojas Navarrete Derek (NI - ESL)", section: "8-1", gender: "M" },
+      { name: "Romero Murillo José Eliel (Banda MCS)", section: "8-1", gender: "M" },
+      { name: "Solera Portilla Mathias", section: "8-1", gender: "M" },
+      { name: "Zhen Zheng Fei Long (ESL)", section: "8-1", gender: "M" },
+
+      // 8-2 (María José Gamboa)
+      { name: "Abarca Jara Sofia (Banda MCS)", section: "8-2", gender: "F" },
+      { name: "Azofeifa Monge Sofia", section: "8-2", gender: "F" },
+      { name: "Beltrán Rodríguez Andrés", section: "8-2", gender: "M" },
+      { name: "Cubero Muñoz Sara", section: "8-2", gender: "F" },
+      { name: "Guerrero Chacón Gloriana (SAPI)", section: "8-2", gender: "F" },
+      { name: "Gutiérrez Sanchez Nicolas", section: "8-2", gender: "M" },
+      { name: "Jiménez Piña Maria Paula", section: "8-2", gender: "F" },
+      { name: "Medina Lara Paola (SAPI)", section: "8-2", gender: "F" },
+      { name: "Montero Aguilar Samuel (Banda MCS)", section: "8-2", gender: "M" },
+      { name: "Quesada Flores Manuela", section: "8-2", gender: "F" },
+      { name: "Rothe Ospino Carlos Enrique", section: "8-2", gender: "M" },
+      { name: "Saenz Olivares Matthew", section: "8-2", gender: "M" },
+      { name: "Sánchez Rojas Emma", section: "8-2", gender: "F" },
+      { name: "Vargas Rosales Isabella (NI)", section: "8-2", gender: "F" },
+      { name: "Wu Zhen Bryan", section: "8-2", gender: "M" },
+      { name: "Zeledón Solano Daniela", section: "8-2", gender: "F" },
+
+      // 8-3 (Claudia García)
+      { name: "Astorga Calvo Valeria", section: "8-3", gender: "F" },
+      { name: "Beltrán Alaniz Sebastián", section: "8-3", gender: "M" },
+      { name: "Brenes Muñiz Samuel Francisco", section: "8-3", gender: "M" },
+      { name: "Céspedez Salazar Santiago David (Banda MCS)", section: "8-3", gender: "M" },
+      { name: "Chavarria Salazar Montserrat", section: "8-3", gender: "F" },
+      { name: "García Aubert Dana", section: "8-3", gender: "F" },
+      { name: "González Martín Felisha", section: "8-3", gender: "F" },
+      { name: "Guadamuz Murillo Sebastián", section: "8-3", gender: "M" },
+      { name: "Gutiérrez Retana Tatiana", section: "8-3", gender: "F" },
+      { name: "Montero Marabé Felipe (SAPI)", section: "8-3", gender: "M" },
+      { name: "Morales Pérez Emma", section: "8-3", gender: "F" },
+      { name: "Ortega Montes José Daniel", section: "8-3", gender: "M" },
+      { name: "Pacheco Aguero Monserrat (SAPI)", section: "8-3", gender: "F" },
+      { name: "Pulido Rodríguez Santiago", section: "8-3", gender: "M" },
+      { name: "Ramírez Araya Naomi", section: "8-3", gender: "F" },
+      { name: "Rojas Hernández Ian", section: "8-3", gender: "M" },
+      { name: "Solano Quesada Valentina", section: "8-3", gender: "F" },
+      { name: "Solano Zamora Abigail", section: "8-3", gender: "F" },
+      { name: "Ureña Ramírez Maripaz", section: "8-3", gender: "F" },
+      { name: "Vargas Monge Alejandro", section: "8-3", gender: "M" },
+
+      // 9-1 (Natalia Briceño)
+      { name: "Arguello Barboza Domingo Esteban", section: "9-1", gender: "M" },
+      { name: "Arias Carvajal Rebeca Andrea", section: "9-1", gender: "F" },
+      { name: "Arroyo Cruz Valeria", section: "9-1", gender: "F" },
+      { name: "Benavides Picado David", section: "9-1", gender: "M" },
+      { name: "Castillo Acuña Valeria", section: "9-1", gender: "F" },
+      { name: "Corrales Azofeifa Mathias (Banda MCS)", section: "9-1", gender: "M" },
+      { name: "Fernández Martínez Noelia", section: "9-1", gender: "F" },
+      { name: "López Ching Daniela (Banda MCS)", section: "9-1", gender: "F" },
+      { name: "López Rivera Laia", section: "9-1", gender: "F" },
+      { name: "Moncada López Samuel Jesús", section: "9-1", gender: "M" },
+      { name: "Obregón Santos Sebastián David", section: "9-1", gender: "M" },
+      { name: "Pereira Chaparro Derian Matías (Banda MCS)", section: "9-1", gender: "M" },
+      { name: "Picado Rodríguez Fabian André", section: "9-1", gender: "M" },
+      { name: "Salazar Cerdas Santiago", section: "9-1", gender: "M" },
+      { name: "Sibaja Vargas Fabricio", section: "9-1", gender: "M" },
+      { name: "Solís Ramírez Nicole", section: "9-1", gender: "F" },
+      { name: "Villalobos Wang Isabella", section: "9-1", gender: "F" },
+      { name: "Zárate Vargas Matías", section: "9-1", gender: "M" },
+
+      // 9-2 (Eddy Corrales)
+      { name: "Artavia Ramos Fiorella (NI)", section: "9-2", gender: "F" },
+      { name: "Cedeño Medina Diego (NI)", section: "9-2", gender: "M" },
+      { name: "Cordero Zamora Daniela", section: "9-2", gender: "F" },
+      { name: "Elizondo Loaiza Andrés", section: "9-2", gender: "M" },
+      { name: "Fonseca Mora Fabiana", section: "9-2", gender: "F" },
+      { name: "García Aguirre Mariana", section: "9-2", gender: "F" },
+      { name: "Mendoza De Carlo Antonio", section: "9-2", gender: "M" },
+      { name: "Obando Villalobos Daniel", section: "9-2", gender: "M" },
+      { name: "Prado Sánchez Amanda", section: "9-2", gender: "F" },
+      { name: "Ramírez Fallas Mathias Eduardo", section: "9-2", gender: "M" },
+      { name: "Rodríguez Molina William Esteban", section: "9-2", gender: "M" },
+      { name: "Sáenz Chavarría Santiago", section: "9-2", gender: "M" },
+      { name: "Ureña Espinoza Sofía María", section: "9-2", gender: "F" },
+      { name: "Vargas Gómez Gabriel (Banda MCS)", section: "9-2", gender: "M" },
+      { name: "Wo Ching Melissa", section: "9-2", gender: "F" },
+
+      // 9-3 (Ana Acuña)
+      { name: "Arias Paniagua Santiago Josué", section: "9-3", gender: "M" },
+      { name: "Barrantes Hekkema Josué Daniel", section: "9-3", gender: "M" },
+      { name: "Camacho Soto Natalia", section: "9-3", gender: "F" },
+      { name: "Chavarría Buendía Paula Elisa", section: "9-3", gender: "F" },
+      { name: "Fernández López Mariana", section: "9-3", gender: "F" },
+      { name: "Gómez Díaz José Ignacio", section: "9-3", gender: "M" },
+      { name: "Lai Liu Ryan", section: "9-3", gender: "M" },
+      { name: "León Salas Santiago (Banda MCS)", section: "9-3", gender: "M" },
+      { name: "Llobet Chanto Emma", section: "9-3", gender: "F" },
+      { name: "Mena Barrera Marco Antonio", section: "9-3", gender: "M" },
+      { name: "Méndez Morales Mathias", section: "9-3", gender: "M" },
+      { name: "Montero Rocha Mathías", section: "9-3", gender: "M" },
+      { name: "Murillo Durán Daniel", section: "9-3", gender: "M" },
+      { name: "Pineda Sibaja Daniela", section: "9-3", gender: "F" },
+      { name: "Pirela Mata Ibrahim Alexander", section: "9-3", gender: "M" },
+      { name: "Rojas Bolandi Diego Santiago", section: "9-3", gender: "M" },
+      { name: "Rojas Castillo Valeria", section: "9-3", gender: "F" },
+      { name: "Sánchez Casorla Olivia", section: "9-3", gender: "F" },
+      { name: "Sánchez Díaz Larissa", section: "9-3", gender: "F" },
+
+      // 9-4 (Ramiro Aguilar)
+      { name: "Alpízar García Isabella", section: "9-4", gender: "F" },
+      { name: "Barquero Cabrera Gabriel Adrián", section: "9-4", gender: "M" },
+      { name: "Castellón Wong Isabella (SAPI)", section: "9-4", gender: "F" },
+      { name: "Cedeño Molina Sara", section: "9-4", gender: "F" },
+      { name: "Ching Rivera José Matias", section: "9-4", gender: "M" },
+      { name: "Delgado Murillo Carlos Andrés", section: "9-4", gender: "M" },
+      { name: "Fuentes Hine Emily", section: "9-4", gender: "F" },
+      { name: "García Herra Mathew (Banda MCS)", section: "9-4", gender: "M" },
+      { name: "González Mathews Kaleth (NI)", section: "9-4", gender: "M" },
+      { name: "Gutiérrez Rojas Samuel", section: "9-4", gender: "M" },
+      { name: "Jiménez Luna Camila", section: "9-4", gender: "F" },
+      { name: "Jiménez Tencio Santiago Josué (Banda MCS)", section: "9-4", gender: "M" },
+      { name: "Lorenzana Ching Fiorella", section: "9-4", gender: "F" },
+      { name: "Montanaro Moya Zuriela", section: "9-4", gender: "F" },
+      { name: "Pérez Suárez Alejandro (NI)", section: "9-4", gender: "M" },
+      { name: "Quirós Fernández Maria Fernanda", section: "9-4", gender: "F" },
+      { name: "Salazar Cartín Raquel", section: "9-4", gender: "F" },
+      { name: "Sánchez Arguedas Gabriel Santiago", section: "9-4", gender: "M" },
+
+      // 10-1 (Joshua Serrano)
+      { name: "Aguilar Fernández Mía", section: "10-1", gender: "F" },
+      { name: "Alfaro Quesada Fernando Alonso (NI)", section: "10-1", gender: "M" },
+      { name: "Álvarez Campos José Pablo (MATEM)", section: "10-1", gender: "M" },
+      { name: "Azofeifa Monge Josué Daniel (MATEM)", section: "10-1", gender: "M" },
+      { name: "Bolaños Quesada Esteban (Banda MCS)", section: "10-1", gender: "M" },
+      { name: "Cedeño Medina Lucía Abigail (NI Oyente)", section: "10-1", gender: "F" },
+      { name: "Centeno Herrera Gabriel (SAPI)", section: "10-1", gender: "M" },
+      { name: "Feng Li Kendy (MATEM)", section: "10-1", gender: "F" },
+      { name: "Jara Chavarría Sofía Priscilla (NI - MATEM)", section: "10-1", gender: "F" },
+      { name: "Lin Morales Elizabeth (MATEM)", section: "10-1", gender: "F" },
+      { name: "Monge Álvarez Josué (MATEM - Banda MCS)", section: "10-1", gender: "M" },
+      { name: "Moraga López Caleb (NI)", section: "10-1", gender: "M" },
+      { name: "Plänkers Charlotte [Intercambio Suiza(8 meses)]", section: "10-1", gender: "F" },
+      { name: "Salas Víquez Nathalia (MATEM - Banda MCS)", section: "10-1", gender: "F" },
+      { name: "Solís González Mariana (MATEM)", section: "10-1", gender: "F" },
+      { name: "Ugalde Mainieri María Lucía", section: "10-1", gender: "F" },
+      { name: "Vargas Quirós Sofía", section: "10-1", gender: "F" },
+      { name: "Villalobos Cerdas María de Jesús (MATEM)", section: "10-1", gender: "F" },
+      { name: "Wayland Micah James (MATEM)", section: "10-1", gender: "M" },
+      { name: "Zúñiga Solís Marcelo", section: "10-1", gender: "M" },
+
+      // 10-2 (Diego Villalobos)
+      { name: "Alvarado Rodríguez Valery (NI)", section: "10-2", gender: "F" },
+      { name: "Arias Murillo Paula Victoria", section: "10-2", gender: "F" },
+      { name: "Barquero Díaz Ignacio", section: "10-2", gender: "M" },
+      { name: "Bryce Paez Samuel (MATEM)", section: "10-2", gender: "M" },
+      { name: "Campos Quirce Isabella (SAPI)", section: "10-2", gender: "F" },
+      { name: "Carrillo Murillo Mauricio", section: "10-2", gender: "M" },
+      { name: "Cordero Aguilar Sofía", section: "10-2", gender: "F" },
+      { name: "D´Amico Camila [Intercambio Italia (4 meses)]", section: "10-2", gender: "F" },
+      { name: "Escoe Mora Mya (MATEM)", section: "10-2", gender: "F" },
+      { name: "Fernández Martínez Mathías", section: "10-2", gender: "M" },
+      { name: "Guzmán Chavarría María José (MATEM)", section: "10-2", gender: "F" },
+      { name: "Jiménez Izaguirre Ariadna", section: "10-2", gender: "F" },
+      { name: "Linter Hanna [Intercambio Alemania (2 meses)]", section: "10-2", gender: "F" },
+      { name: "Morales Bonilla Sofía (MATEM)", section: "10-2", gender: "F" },
+      { name: "Smith Barnett Ashley Elaine (MATEM)", section: "10-2", gender: "F" },
+      { name: "Vindas Bryden Nayara (MATEM)", section: "10-2", gender: "F" },
+
+      // 10-3 (Mónica Granados)
+      { name: "Álvarez Marín Felipe", section: "10-3", gender: "M" },
+      { name: "Bermúdez Carranza Diego Esteban", section: "10-3", gender: "M" },
+      { name: "Blanco Da Luz Santiago Alessandro", section: "10-3", gender: "M" },
+      { name: "Bolaños Retana Fabiana", section: "10-3", gender: "F" },
+      { name: "Botero Peña Thomas", section: "10-3", gender: "M" },
+      { name: "Gómez Díaz Emily (Banda MCS)", section: "10-3", gender: "F" },
+      { name: "Gregory Moss Brianna Iffe", section: "10-3", gender: "F" },
+      { name: "Haug Sanabria Esteban", section: "10-3", gender: "M" },
+      { name: "Jiménez Gutiérrez Ariana", section: "10-3", gender: "F" },
+      { name: "Molina Mora Isabella", section: "10-3", gender: "F" },
+      { name: "Mora Jiménez Isaac (NI)", section: "10-3", gender: "M" },
+      { name: "Mora Mora Diana", section: "10-3", gender: "F" },
+      { name: "Ortiz Fuentes Fabiana", section: "10-3", gender: "F" },
+      { name: "Pérez Guzmán Isaac", section: "10-3", gender: "M" },
+      { name: "Sánchez Casorla Matías (NI)", section: "10-3", gender: "M" },
+      { name: "Tejeda Loria Gael", section: "10-3", gender: "M" },
+      { name: "Wong Cubero Gloriana", section: "10-3", gender: "F" },
+      { name: "Wong Godínez Valery", section: "10-3", gender: "F" },
+
+      // 11-1 (Vanessa Amador)
+      { name: "Acuña Zúñiga Giuliana", section: "11-1", gender: "F" },
+      { name: "Arce Chanto Gabriel (MATEM)", section: "11-1", gender: "M" },
+      { name: "Elliott Prittchard Oliver (SAPI)", section: "11-1", gender: "M" },
+      { name: "Ellis Vargas Emma", section: "11-1", gender: "F" },
+      { name: "Escobar Jiménez Mathías (MATEM)", section: "11-1", gender: "M" },
+      { name: "García Aguirre Catalina", section: "11-1", gender: "F" },
+      { name: "Gourzong Madriz Isabella", section: "11-1", gender: "F" },
+      { name: "Hernández Zúñiga Krystel", section: "11-1", gender: "F" },
+      { name: "Josbrant Loría Mattías", section: "11-1", gender: "M" },
+      { name: "Lam Li Johnny (MATEM)", section: "11-1", gender: "M" },
+      { name: "Morales Vargas Emily Johanna (MATEM)", section: "11-1", gender: "F" },
+      { name: "Muñoz Chacón María Fernánda (MATEM)", section: "11-1", gender: "F" },
+      { name: "Quesada Flores Emmanuel de Jesús", section: "11-1", gender: "M" },
+      { name: "Soto Arias Dara Sofía (Banda MCS)", section: "11-1", gender: "F" },
+      { name: "Valladares Corrales Felipe", section: "11-1", gender: "M" },
+      { name: "Vargas Goyenaga Fiorella", section: "11-1", gender: "F" },
+
+      // 11-2 (Carolina Ordóñez)
+      { name: "Amador González Alex", section: "11-2", gender: "M" },
+      { name: "Barillas Jaco Sebastián (MATEM)", section: "11-2", gender: "M" },
+      { name: "Caravaca Jiménez Sofía", section: "11-2", gender: "F" },
+      { name: "Escalante Molina Ignacio", section: "11-2", gender: "M" },
+      { name: "Guevara Coto Valentina (NI)", section: "11-2", gender: "F" },
+      { name: "Laitano Lobo Alessandro (MATEM)", section: "11-2", gender: "M" },
+      { name: "Mesén Solórzano Fiorella", section: "11-2", gender: "F" },
+      { name: "Mora Chaves Gabriel (MATEM)", section: "11-2", gender: "M" },
+      { name: "Moraga Calderón Daniel (MATEM)", section: "11-2", gender: "M" },
+      { name: "Quesada Sevilla Valeria", section: "11-2", gender: "F" },
+      { name: "Salazar Valerio Alejandro (MATEM)", section: "11-2", gender: "M" },
+      { name: "Sibaja Díaz Santiago", section: "11-2", gender: "M" },
+      { name: "Soto Serrano Valeria", section: "11-2", gender: "F" },
+      { name: "Vargas Wabe Emma", section: "11-2", gender: "F" },
+
+      // 11-3 (Danny Chaves)
+      { name: "Barrientos González Josué", section: "11-3", gender: "M" },
+      { name: "Calderón Yockchen Maily", section: "11-3", gender: "F" },
+      { name: "Córdoba Fernandez Isabella", section: "11-3", gender: "F" },
+      { name: "Dacosta Ulloa Aubree", section: "11-3", gender: "F" },
+      { name: "Jiménez Piña María Jesús (MATEM)", section: "11-3", gender: "F" },
+      { name: "Llobet Chanto Bruno", section: "11-3", gender: "M" },
+      { name: "Monge Arguedas Mathias", section: "11-3", gender: "M" },
+      { name: "Munguía Gutierrez Carlos", section: "11-3", gender: "M" },
+      { name: "Obando Villalobos Fabiana Lucía", section: "11-3", gender: "F" },
+      { name: "Oconitrillo Palma Daniel", section: "11-3", gender: "M" },
+      { name: "Ortega Montes Eva María (MATEM)", section: "11-3", gender: "F" },
+      { name: "Ramos Rodríguez Oscar (MATEM)", section: "11-3", gender: "M" },
+      { name: "Rojas Zeledón Matías (MATEM)", section: "11-3", gender: "M" },
+      { name: "Saborío Treminio Gabriel (MATEM)", section: "11-3", gender: "M" },
+      { name: "Soto Lépiz Valeria", section: "11-3", gender: "F" },
+      { name: "Taylor Solís Samantha (MATEM)", section: "11-3", gender: "F" },
+      { name: "Trejos Quesada Mariana", section: "11-3", gender: "F" }
     ];
 
     let state = {
@@ -612,110 +910,118 @@
       const isEarned = state.evaluations[evalKey] === true;
       const banner = document.getElementById('evalStatusBanner');
       const btnAward = document.getElementById('btnAwardPoints');
+      const btnRevoke = document.getElementById('btnRevokePoints');
 
       if (isEarned) {
         banner.className = "p-3 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center justify-center space-x-2";
         banner.innerHTML = '<i class="fa-solid fa-lock"></i><span>¡PUNTOS GANADOS! El estudiante ya aprobó este versículo y sus puntos están asegurados.</span>';
         btnAward.disabled = true;
         btnAward.classList.add('opacity-50', 'cursor-not-allowed');
+        btnRevoke.disabled = false;
+        btnRevoke.classList.remove('opacity-50', 'cursor-not-allowed');
       } else {
-        banner.className = "p-3 rounded-lg text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200";
-        banner.innerText = 'El estudiante aún no ha obtenido los puntos de este versículo.';
+        banner.className = "p-3 rounded-lg text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center space-x-2";
+        banner.innerHTML = '<i class="fa-solid fa-clock"></i><span>PENDIENTE: El estudiante aún no ha recibido la puntuación de este versículo.</span>';
         btnAward.disabled = false;
         btnAward.classList.remove('opacity-50', 'cursor-not-allowed');
+        btnRevoke.disabled = true;
+        btnRevoke.classList.add('opacity-50', 'cursor-not-allowed');
       }
 
       box.classList.remove('hidden');
     };
 
-    window.setVerseStatus = function(earned) {
+    window.setVerseStatus = function(status) {
       const stId = document.getElementById('evalStudent').value;
       const vId = document.getElementById('evalVerse').value;
       if (!stId || !vId) return;
 
       const evalKey = `${stId}_${vId}`;
-
-      if (earned) {
+      if (status) {
         state.evaluations[evalKey] = true;
-        showToast('¡Puntos asignados al estudiante correctamente!');
+        showToast('Puntos otorgados con éxito.');
       } else {
         delete state.evaluations[evalKey];
-        showToast('Puntos removidos / Versículo pendiente');
+        showToast('Estado actualizado a pendiente.');
       }
 
       localStorage.setItem('mcs_2026_evals', JSON.stringify(state.evaluations));
-      renderVerseEvaluationBox();
+      window.renderVerseEvaluationBox();
     };
 
-    // GLOBAL SCOREBOARD
+    // GLOBAL SCORES
     window.renderGlobalScores = function() {
+      const filter = document.getElementById('globalSectionFilter').value;
       const tbody = document.getElementById('globalTableBody');
-      const secFilter = document.getElementById('globalSectionFilter').value;
       tbody.innerHTML = '';
 
-      let studentScores = state.students.map(s => {
-        let totalPts = 0;
-        let countVerses = 0;
-
+      let list = state.students.map(st => {
+        let completed = 0;
+        let points = 0;
         state.verses.forEach(v => {
-          const evalKey = `${s.id}_${v.id}`;
-          if (state.evaluations[evalKey] === true) {
-            totalPts += v.points;
-            countVerses++;
+          if (state.evaluations[`${st.id}_${v.id}`] === true) {
+            completed++;
+            points += parseInt(v.points || 0);
           }
         });
-
-        return { ...s, totalPts, countVerses };
+        return { ...st, completed, points };
       });
 
-      if (secFilter !== 'ALL') {
-        studentScores = studentScores.filter(s => s.section === secFilter);
+      if (filter !== 'ALL') {
+        list = list.filter(s => s.section === filter);
       }
 
-      // Sort by points descending
-      studentScores.sort((a, b) => b.totalPts - a.totalPts);
+      list.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
 
-      studentScores.forEach((s, idx) => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50";
-        tr.innerHTML = `
-          <td class="p-3 text-center font-extrabold text-slate-400">${idx + 1}</td>
-          <td class="p-3 font-semibold text-slate-800">${s.name}</td>
-          <td class="p-3"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs font-bold">${s.section}</span></td>
-          <td class="p-3 text-center font-bold text-slate-600">${s.countVerses} / ${state.verses.length}</td>
-          <td class="p-3 text-center font-extrabold text-emerald-600">${s.totalPts} pts</td>
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registros para mostrar</td></tr>`;
+        return;
+      }
+
+      list.forEach((st, idx) => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-3 text-center font-bold text-slate-500">${idx + 1}</td>
+            <td class="p-3 font-semibold text-slate-800">${st.name}</td>
+            <td class="p-3"><span class="bg-slate-100 text-slate-700 font-bold px-2 py-1 rounded text-xs">Sección ${st.section}</span></td>
+            <td class="p-3 text-center font-bold text-slate-600">${st.completed} / ${state.verses.length}</td>
+            <td class="p-3 text-center"><span class="bg-amber-100 text-amber-800 font-extrabold px-3 py-1 rounded-full text-xs">${st.points} pts</span></td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
     };
 
-    // VERSES MANAGEMENT
+    // VERSE MANAGEMENT
     function renderVerseList() {
       const tbody = document.getElementById('verseTableBody');
       tbody.innerHTML = '';
 
+      if (state.verses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay versículos registrados</td></tr>`;
+        return;
+      }
+
       state.verses.forEach(v => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50";
-        tr.innerHTML = `
-          <td class="p-3 font-bold text-slate-800">${v.reference}</td>
-          <td class="p-3 text-slate-600 italic max-w-md">${v.text}</td>
-          <td class="p-3 text-center font-extrabold text-amber-600">${v.points} pts</td>
-          <td class="p-3 text-center space-x-2">
-            <button onclick="window.editVerse('${v.id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="window.deleteVerse('${v.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
-          </td>
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-3 font-bold text-slate-800">${v.reference}</td>
+            <td class="p-3 text-slate-600 italic">"${v.text}"</td>
+            <td class="p-3 text-center"><span class="bg-amber-100 text-amber-800 font-extrabold px-2.5 py-1 rounded-full text-xs">${v.points} pts</span></td>
+            <td class="p-3 text-center space-x-2">
+              <button onclick="window.editVerse('${v.id}')" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="window.deleteVerse('${v.id}')" class="text-rose-600 hover:text-rose-800"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
     }
 
     window.openVerseModal = function() {
       document.getElementById('verseEditId').value = '';
+      document.getElementById('verseModalTitle').innerText = 'Agregar Versículo';
       document.getElementById('verseReference').value = '';
       document.getElementById('verseContent').value = '';
       document.getElementById('versePoints').value = 10;
-      document.getElementById('verseModalTitle').innerText = 'Agregar Versículo';
       document.getElementById('verseModal').classList.remove('hidden');
     };
 
@@ -723,84 +1029,92 @@
       document.getElementById('verseModal').classList.add('hidden');
     };
 
+    window.saveVerseForm = function(e) {
+      e.preventDefault();
+      const id = document.getElementById('verseEditId').value;
+      const ref = document.getElementById('verseReference').value.trim();
+      const text = document.getElementById('verseContent').value.trim();
+      const points = parseInt(document.getElementById('versePoints').value);
+
+      if (id) {
+        const index = state.verses.findIndex(v => v.id === id);
+        if (index !== -1) {
+          state.verses[index] = { id, reference: ref, text, points };
+          showToast('Versículo actualizado');
+        }
+      } else {
+        const newId = 'v_' + Date.now();
+        state.verses.push({ id: newId, reference: ref, text, points });
+        showToast('Versículo agregado');
+      }
+
+      localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
+      window.closeVerseModal();
+      renderVerseList();
+    };
+
     window.editVerse = function(id) {
       const v = state.verses.find(item => item.id === id);
       if (!v) return;
       document.getElementById('verseEditId').value = v.id;
+      document.getElementById('verseModalTitle').innerText = 'Editar Versículo';
       document.getElementById('verseReference').value = v.reference;
       document.getElementById('verseContent').value = v.text;
       document.getElementById('versePoints').value = v.points;
-      document.getElementById('verseModalTitle').innerText = 'Editar Versículo';
       document.getElementById('verseModal').classList.remove('hidden');
     };
 
-    window.saveVerseForm = function(e) {
-      e.preventDefault();
-      const editId = document.getElementById('verseEditId').value;
-      const reference = document.getElementById('verseReference').value.trim();
-      const text = document.getElementById('verseContent').value.trim();
-      const points = parseInt(document.getElementById('versePoints').value, 10) || 0;
-
-      if (editId) {
-        const idx = state.verses.findIndex(v => v.id === editId);
-        if (idx !== -1) {
-          state.verses[idx] = { id: editId, reference, text, points };
-          showToast('Versículo actualizado');
-        }
-      } else {
-        const newV = { id: 'v_' + Date.now(), reference, text, points };
-        state.verses.push(newV);
-        showToast('Versículo registrado');
-      }
-
-      localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
-      closeVerseModal();
-      refreshUI();
-    };
-
     window.deleteVerse = function(id) {
-      if (confirm('¿Eliminar este versículo? Se afectarán las evaluaciones asociadas.')) {
-        state.verses = state.verses.filter(v => v.id !== id);
-        localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
-        showToast('Versículo eliminado');
-        refreshUI();
-      }
+      if (!confirm('¿Desea eliminar este versículo?')) return;
+      state.verses = state.verses.filter(v => v.id !== id);
+      localStorage.setItem('mcs_2026_verses', JSON.stringify(state.verses));
+      renderVerseList();
+      showToast('Versículo eliminado');
     };
 
     // STUDENT MANAGEMENT
     function renderStudentList() {
-      const tbody = document.getElementById('studentTableBody');
       const search = document.getElementById('studentSearchInput').value.toLowerCase();
-      const secFilter = document.getElementById('studentSectionFilter').value;
-
+      const filter = document.getElementById('studentSectionFilter').value;
+      const tbody = document.getElementById('studentTableBody');
       tbody.innerHTML = '';
 
-      const filtered = state.students.filter(s => {
-        const matchesName = s.name.toLowerCase().includes(search);
-        const matchesSec = secFilter === 'ALL' || s.section === secFilter;
-        return matchesName && matchesSec;
+      let list = state.students.filter(s => {
+        const matchesSearch = s.name.toLowerCase().includes(search);
+        const matchesSection = filter === 'ALL' || s.section === filter;
+        return matchesSearch && matchesSection;
       });
 
-      filtered.forEach(s => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50";
-        tr.innerHTML = `
-          <td class="p-3 font-semibold text-slate-800">${s.name}</td>
-          <td class="p-3"><span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-xs font-bold">${s.section}</span></td>
-          <td class="p-3">${s.gender === 'M' ? '<span class="text-blue-600 font-bold text-xs"><i class="fa-solid fa-mars mr-1"></i>Varón</span>' : '<span class="text-pink-600 font-bold text-xs"><i class="fa-solid fa-venus mr-1"></i>Mujer</span>'}</td>
-          <td class="p-3 text-center space-x-2">
-            <button onclick="window.editStudent('${s.id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="window.deleteStudent('${s.id}', '${s.name}')" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
-          </td>
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay estudiantes que coincidan con la búsqueda</td></tr>`;
+        return;
+      }
+
+      list.forEach(s => {
+        const genderBadge = s.gender === 'F' 
+          ? '<span class="bg-pink-100 text-pink-700 px-2 py-0.5 rounded text-xs font-bold">Femenino</span>' 
+          : '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">Masculino</span>';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-3 font-semibold text-slate-800">${s.name}</td>
+            <td class="p-3"><span class="bg-slate-100 text-slate-700 font-bold px-2 py-1 rounded text-xs">Sección ${s.section}</span></td>
+            <td class="p-3">${genderBadge}</td>
+            <td class="p-3 text-center space-x-2">
+              <button onclick="window.editStudent('${s.id}')" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="window.deleteStudent('${s.id}')" class="text-rose-600 hover:text-rose-800"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
     }
 
     window.openStudentModal = function() {
       document.getElementById('studentEditId').value = '';
-      document.getElementById('studentFullName').value = '';
       document.getElementById('studentModalTitle').innerText = 'Agregar Estudiante';
+      document.getElementById('studentFullName').value = '';
+      document.getElementById('studentSection').value = state.sections[0];
+      document.getElementById('studentGender').value = 'M';
       document.getElementById('studentModal').classList.remove('hidden');
     };
 
@@ -808,113 +1122,97 @@
       document.getElementById('studentModal').classList.add('hidden');
     };
 
-    window.editStudent = function(id) {
-      const st = state.students.find(s => s.id === id);
-      if (!st) return;
-      document.getElementById('studentEditId').value = st.id;
-      document.getElementById('studentFullName').value = st.name;
-      document.getElementById('studentSection').value = st.section;
-      document.getElementById('studentGender').value = st.gender;
-      document.getElementById('studentModalTitle').innerText = 'Editar Estudiante';
-      document.getElementById('studentModal').classList.remove('hidden');
-    };
-
     window.saveStudentForm = function(e) {
       e.preventDefault();
-      const editId = document.getElementById('studentEditId').value;
+      const id = document.getElementById('studentEditId').value;
       const name = document.getElementById('studentFullName').value.trim();
       const section = document.getElementById('studentSection').value;
       const gender = document.getElementById('studentGender').value;
 
-      if (editId) {
-        const idx = state.students.findIndex(s => s.id === editId);
-        if (idx !== -1) {
-          state.students[idx] = { id: editId, name, section, gender };
-          showToast('Estudiante actualizado');
+      if (id) {
+        const index = state.students.findIndex(s => s.id === id);
+        if (index !== -1) {
+          state.students[index] = { id, name, section, gender };
+          showToast('Registro de estudiante actualizado');
         }
       } else {
-        const newSt = { id: 'st_' + Date.now(), name, section, gender };
-        state.students.push(newSt);
-        showToast('Estudiante registrado');
+        const newId = 'st_' + Date.now();
+        state.students.push({ id: newId, name, section, gender });
+        showToast('Estudiante agregado con éxito');
       }
 
       localStorage.setItem('mcs_2026_students', JSON.stringify(state.students));
-      closeStudentModal();
-      refreshUI();
+      window.closeStudentModal();
+      renderStudentList();
     };
 
-    window.deleteStudent = function(id, name) {
-      if (confirm(`¿Está seguro/a de eliminar a "${name}"?`)) {
-        state.students = state.students.filter(s => s.id !== id);
-        localStorage.setItem('mcs_2026_students', JSON.stringify(state.students));
-        showToast('Estudiante eliminado');
-        refreshUI();
-      }
+    window.editStudent = function(id) {
+      const s = state.students.find(item => item.id === id);
+      if (!s) return;
+      document.getElementById('studentEditId').value = s.id;
+      document.getElementById('studentModalTitle').innerText = 'Editar Estudiante';
+      document.getElementById('studentFullName').value = s.name;
+      document.getElementById('studentSection').value = s.section;
+      document.getElementById('studentGender').value = s.gender || 'M';
+      document.getElementById('studentModal').classList.remove('hidden');
     };
 
-    // ADMIN MANAGEMENT (Restringido solo al Máster)
-    window.closeAdminModal = function() {
-      document.getElementById('adminModal').classList.add('hidden');
+    window.deleteStudent = function(id) {
+      if (!confirm('¿Desea eliminar a este estudiante?')) return;
+      state.students = state.students.filter(s => s.id !== id);
+      localStorage.setItem('mcs_2026_students', JSON.stringify(state.students));
+      renderStudentList();
+      showToast('Estudiante eliminado');
     };
 
+    // ADMIN MANAGEMENT
     window.renderAdminList = function() {
       const tbody = document.getElementById('adminListTable');
       tbody.innerHTML = '';
       state.admins.forEach(a => {
-        const uName = a.username || a.user || '';
         const isMaster = a.role === 'master';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="p-2 font-medium">${a.name || uName}</td>
-          <td class="p-2 text-slate-500">${uName}</td>
-          <td class="p-2"><span class="px-1.5 py-0.5 text-xs rounded font-bold ${isMaster ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}">${isMaster ? 'Maestro' : 'Regular'}</span></td>
-          <td class="p-2 text-center">
-            ${!isMaster ? `<button onclick="window.deleteAdmin('${a.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-user-xmark"></i></button>` : '-'}
-          </td>
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50">
+            <td class="p-2 font-semibold text-slate-800">${a.name || a.username}</td>
+            <td class="p-2 text-slate-600">${a.username || a.user}</td>
+            <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isMaster ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}">${a.role}</span></td>
+            <td class="p-2 text-center">
+              ${!isMaster ? `<button onclick="window.deleteAdmin('${a.id}')" class="text-rose-600 hover:text-rose-800"><i class="fa-solid fa-trash"></i></button>` : '<span class="text-slate-300">-</span>'}
+            </td>
+          </tr>
         `;
-        tbody.appendChild(tr);
       });
     };
 
     window.handleAddAdmin = function(e) {
       e.preventDefault();
       const name = document.getElementById('newAdminName').value.trim();
-      const user = document.getElementById('newAdminUser').value.trim().toLowerCase();
+      const user = document.getElementById('newAdminUser').value.trim();
       const pass = document.getElementById('newAdminPass').value.trim();
       const role = document.getElementById('newAdminRole').value;
 
-      if (state.admins.some(a => (a.username || a.user || '').toLowerCase() === user)) {
-        showToast('El usuario ya existe');
-        return;
-      }
-
-      const newAdmin = {
-        id: 'adm_' + Date.now(),
-        name,
-        username: user,
-        user: user,
-        password: pass,
-        role,
-        createdAt: new Date().toISOString()
-      };
-
+      const newAdmin = { id: 'adm_' + Date.now(), name, username: user, password: pass, role };
       state.admins.push(newAdmin);
       localStorage.setItem('mcs_2026_admins', JSON.stringify(state.admins));
-      renderAdminList();
-      showToast('Administrador agregado');
 
       document.getElementById('newAdminName').value = '';
       document.getElementById('newAdminUser').value = '';
       document.getElementById('newAdminPass').value = '';
+
+      window.renderAdminList();
+      showToast('Administrador registrado');
     };
 
     window.deleteAdmin = function(id) {
-      if (confirm('¿Desea remover el acceso a este administrador?')) {
-        state.admins = state.admins.filter(a => a.id !== id);
-        localStorage.setItem('mcs_2026_admins', JSON.stringify(state.admins));
-        renderAdminList();
-        showToast('Administrador eliminado');
-      }
+      if (!confirm('¿Eliminar este administrador?')) return;
+      state.admins = state.admins.filter(a => a.id !== id);
+      localStorage.setItem('mcs_2026_admins', JSON.stringify(state.admins));
+      window.renderAdminList();
+      showToast('Administrador eliminado');
+    };
+
+    window.closeAdminModal = function() {
+      document.getElementById('adminModal').classList.add('hidden');
     };
 
     // UTILS
@@ -922,10 +1220,10 @@
       const toast = document.getElementById('toast');
       document.getElementById('toastMsg').innerText = msg;
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 3000);
+      setTimeout(() => { toast.classList.add('hidden'); }, 3000);
     }
 
-    // INIT ON LOAD
+    // INIT
     window.addEventListener('DOMContentLoaded', () => {
       loadInitialFallbackData();
     });
